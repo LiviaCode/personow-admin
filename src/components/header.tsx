@@ -6,7 +6,7 @@ import { Bell, LogOut, Megaphone, Settings, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
-import userDefault from '@/assets/user.png'
+// import userDefault from '@/assets/user.png'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -63,10 +63,10 @@ export function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                // variant="none"
+                variant="none"
                 className="w-0 rounded-full bg-transparent"
               >
-                <Bell className="size-8" />
+                <Bell className="size-6" />
               </Button>
             </DropdownMenuTrigger>
 
@@ -95,8 +95,7 @@ export function Header() {
                   <Skeleton className="size-8 rounded-full" />
             
                   <Avatar className="size-8">
-                    <AvatarImage
-                    />
+                  <AvatarImage src="https://github.com/shadcn.png" />
                   </Avatar>
            
               </Button>

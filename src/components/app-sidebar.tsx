@@ -13,11 +13,11 @@ import {
   Send,
   UsersRound,
 } from 'lucide-react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import logo from '@/assets/logo.png'
+// import logo from '@/assets/logo.png'
 import {
   Sidebar,
   SidebarContent,
@@ -85,7 +85,7 @@ export function AppSidebar() {
               src={logo}
               width={350}
               height={350}
-              alt="Logo BichoZen"
+              alt=""
               style={{ width: 'auto', height: 'auto' }}
               priority
             /> */}
@@ -105,7 +105,7 @@ export function AppSidebar() {
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
                             data-active={isActive}
-                            className="flex items-center justify-between py-5 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-[#560C5C] data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#8FA88B] data-[state=open]:hover:bg-[#560C5C] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
+                            className="flex items-center justify-between py-8 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-[#560C5C] data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#560C5C] data-[state=open]:hover:bg-[#560C5C] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
                           >
                             <Link href={item.url} className="flex items-center">
                               <item.icon className="mr-4 size-6" />
@@ -139,7 +139,7 @@ export function AppSidebar() {
                     ) : (
                       <SidebarMenuButton
                         data-active={isActive}
-                        className="py-5 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-[#8FA88B] data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#8FA88B] data-[state=open]:hover:bg-[#8FA88B] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
+                        className="py-5 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-[#560C5C] data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#560C5C] data-[state=open]:hover:bg-[#560C5C] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
                       >
                         <Link href={item.url} className="flex items-center">
                           <item.icon className="mr-4 size-6" />

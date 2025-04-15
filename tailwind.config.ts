@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 export default {
-  darkMode: 'class',
+  darkMode: ['class'],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -60,43 +60,24 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
-        beige: {
-          DEFAULT: '#4B3421',
-          'input-border': '#EBE3DA',
-          900: '#FFF8F0',
-          800: '#FFDBC5',
-          700: '#F4B89E',
-          600: '#E4CEB6',
-          500: '#F5ECE6',
+
+        purple: {
+          900: '#340C40',
+          800: '#560C5C',
         },
-        green: {
-          900: '#487743',
-          800: '#6A9665',
-          700: '#8FC888',
+
+        orange: {
+          900: '#FF7712',
+          800: '#FFA40B'
         },
-        brown: {
-          900: '#3B1710',
-          800: '#816F5F',
-          700: '#4B3421',
-          600: '#765B53',
-        },
-        red: {
-          900: '#FF6B6B',
-        },
-        gray: {
-          900: '#4D4B48',
-        },
+        
         'background-web': 'var(--color-background)', // Fundo
         'card-web': 'var(--color-card)', // Cor do card
         'text-web': 'var(--color-text)', // Texto principal
         'primary-web': 'var(--color-primary)', // Cor primária
         'secondary-web': 'var(--color-secondary)', // Cor secundária
         'border-web': 'var(--color-border)', // Bordas
-        'accent-web': {
-          900: 'var(--color-accent-900)', // Verde escuro
-          800: 'var(--color-accent-800)', // Verde médio
-          700: 'var(--color-accent-700)', // Verde claro
-        },
+
         neutral: {
           900: 'var(--color-neutral-900)', // Marrom escuro
           800: 'var(--color-neutral-800)', // Marrom médio

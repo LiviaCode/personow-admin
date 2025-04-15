@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Suspense } from 'react'
 
 import { AppSidebar } from '@/components/app-sidebar'
+// import { VerifyAdmin } from '@/components/auth/verify-admin'
 import { Header } from '@/components/header'
 import { Separator } from '@/components/ui/separator'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
@@ -30,12 +31,13 @@ export default function ProvidersAdmin({
           </div>
 
           <div className="overflow-y-auto">
-            <Suspense key={pathname}>
+            <Suspense key={pathname} >
+            {/* fallback={<LoaderPet full={false} />}> */}
               {children}
             </Suspense>
           </div>
         </div>
       </SidebarProvider>
-    </>
+     </>
   )
 }
