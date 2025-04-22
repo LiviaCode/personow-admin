@@ -28,7 +28,7 @@ type TabelaProps = {
 
 export default function TablePersonal({ columns, datas }: TabelaProps) {
   return (
-    <Table className="w-full border-collapse shadow-xl">
+    <Table className="w-full overflow-hidden rounded-lg shadow-xl border-collapse bg-purple-800">
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
