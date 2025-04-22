@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@radix-ui/react-collapsible'
+} from "@radix-ui/react-collapsible";
 import {
   ChartNoAxesCombined,
   ChevronDown,
@@ -12,10 +12,17 @@ import {
   Mail,
   Send,
   UsersRound,
+<<<<<<< HEAD
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+=======
+} from "lucide-react";
+// import Image from 'next/image'
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+>>>>>>> cbe7963ce4af5717bc3b15d90f22adeda4a6ad33
 
 import logo from '@/assets/logo.png'
 import {
@@ -30,51 +37,51 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
 
 interface SubItemProps {
-  title: string
-  url: string
+  title: string;
+  url: string;
 }
 
 interface ItemsProps {
-  title: string
-  url: string
-  icon: LucideIcon
-  subItems?: SubItemProps[]
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  subItems?: SubItemProps[];
 }
 
 const items: ItemsProps[] = [
   {
-    title: 'Dashboard',
-    url: '/admin',
+    title: "Dashboard",
+    url: "/admin",
     icon: ChartNoAxesCombined,
   },
   {
-    title: 'Meus Alunos',
-    url: '/admin/meus-alunos',
+    title: "Meus Alunos",
+    url: "/admin/meus-alunos",
     icon: UsersRound,
   },
   {
-    title: 'Mensagens',
-    url: '/admin/mensagens',
+    title: "Mensagens",
+    url: "/admin/mensagens",
     icon: Mail,
   },
   {
-    title: 'Solicitações de Agendamentos',
-    url: '',
+    title: "Solicitações de Agendamentos",
+    url: "/admin/solicitacoes-agendamentos",
     icon: Send,
     subItems: [
       {
-        title: 'Minha Agenda',
-        url: '/admin/solicitacoes-agendamentos/minha-agenda',
+        title: "Minha Agenda",
+        url: "/admin/solicitacoes-agendamentos/minha-agenda",
       },
     ],
   },
-]
+];
 
 export function AppSidebar() {
-  const pathName = usePathname()
+  const pathName = usePathname();
 
   return (
     <Sidebar>
@@ -96,7 +103,7 @@ export function AppSidebar() {
 
             <SidebarMenu className="space-y-2">
               {items.map((item) => {
-                const isActive = pathName === item.url
+                const isActive = pathName === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -150,12 +157,12 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     )}
                   </SidebarMenuItem>
-                )
+                );
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
