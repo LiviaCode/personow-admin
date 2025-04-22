@@ -1,3 +1,5 @@
-export default function MeusAlunos() {
-  return <h1>Agenda</h1>;
+import Agenda from "./agenda";
+
+export default function AgendaPage() {
+  return <Agenda></Agenda>;
 }

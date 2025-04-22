@@ -39,17 +39,17 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Variáveis teste */
-    --color-background: #FFF8F0;       /* Fundo */
-    --color-card: #FFF8F0;             /* Cor do card */
-    --color-text: #381D2D;             /* Texto principal */
-    --color-primary: #4B3421;          /* Cor primária */
-    --color-secondary: #3B1710;        /* Cor secundária (marrom escuro) */
-    --color-border: #EBE3DA;           /* Bordas de inputs */
-    --color-accent-900: #487743;       /* Verde escuro */
-    --color-accent-800: #6A9665;       /* Verde médio */
-    --color-accent-700: #8FC888;       /* Verde claro */
-    --color-neutral-900: #3B1710;      /* Marrom escuro */
-    --color-neutral-800: #816F5F;      /* Marrom médio */
+    --color-background: #fff8f0; /* Fundo */
+    --color-card: #fff8f0; /* Cor do card */
+    --color-text: #381d2d; /* Texto principal */
+    --color-primary: #4b3421; /* Cor primária */
+    --color-secondary: #3b1710; /* Cor secundária (marrom escuro) */
+    --color-border: #ebe3da; /* Bordas de inputs */
+    --color-accent-900: #487743; /* Verde escuro */
+    --color-accent-800: #6a9665; /* Verde médio */
+    --color-accent-700: #8fc888; /* Verde claro */
+    --color-neutral-900: #3b1710; /* Marrom escuro */
+    --color-neutral-800: #816f5f; /* Marrom médio */
   }
 
   .dark {
@@ -87,18 +87,36 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Variáveis teste */
-    --color-background: #111111;       /* Fundo escuro */
-    --color-card: #000000;             /* Card preto */
-    --color-text: #F5E9DC;             /* Texto principal (beige claro) */
-    --color-primary: #3B2A1F;          /* Cor primária (marrom escuro ajustado) */
-    --color-secondary: #2E1F13;        /* Cor secundária (marrom muito escuro) */
-    --color-border: #4A3C31;           /* Bordas de inputs (marrom médio escuro) */
-    --color-accent-900: #2C4A2A;       /* Verde escuro */
-    --color-accent-800: #3E6A3A;       /* Verde médio escuro */
-    --color-accent-700: #5A8F55;       /* Verde claro escuro */
-    --color-neutral-900: #24100C;      /* Marrom escuro */
-    --color-neutral-800: #3E2E24;      /* Marrom médio escuro */
+    --color-background: #111111; /* Fundo escuro */
+    --color-card: #000000; /* Card preto */
+    --color-text: #f5e9dc; /* Texto principal (beige claro) */
+    --color-primary: #3b2a1f; /* Cor primária (marrom escuro ajustado) */
+    --color-secondary: #2e1f13; /* Cor secundária (marrom muito escuro) */
+    --color-border: #4a3c31; /* Bordas de inputs (marrom médio escuro) */
+    --color-accent-900: #2c4a2a; /* Verde escuro */
+    --color-accent-800: #3e6a3a; /* Verde médio escuro */
+    --color-accent-700: #5a8f55; /* Verde claro escuro */
+    --color-neutral-900: #24100c; /* Marrom escuro */
+    --color-neutral-800: #3e2e24; /* Marrom médio escuro */
   }
+}
+
+/* Personaliza a borda da área do calendário */
+.fc-today-button.fc-button.fc-button-primary {
+  background-color: orange;
+}
+
+button.fc-button.fc-button-primary {
+  background-color: orange;
+}
+
+.fc-toolbar-title {
+  color: orange;
+  font-weight: 900;
+}
+
+.fc-col-header {
+  border: 3px solid orange;
 }
 
 @layer base {
