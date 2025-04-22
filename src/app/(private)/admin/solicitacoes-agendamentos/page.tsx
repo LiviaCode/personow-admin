@@ -20,9 +20,9 @@ export default function MeusAlunos() {
       title="Solicitações de Agendamento"
       selectOptions={selectOptions}
     >
-      <div className="h-[26rem] overflow-y-auto rounded-lg bg-purple-800 p-3">
+ 
         <TablePersonal columns={Column} datas={dados} />
-      </div>
+  
     </FiltroContainer>
   );
 }

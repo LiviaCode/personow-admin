@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@radix-ui/react-collapsible";
+} from '@radix-ui/react-collapsible'
 import {
   ChartNoAxesCombined,
   ChevronDown,
@@ -12,17 +12,10 @@ import {
   Mail,
   Send,
   UsersRound,
-<<<<<<< HEAD
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-=======
-} from "lucide-react";
-// import Image from 'next/image'
-import Link from "next/link";
-import { usePathname } from "next/navigation";
->>>>>>> cbe7963ce4af5717bc3b15d90f22adeda4a6ad33
 
 import logo from '@/assets/logo.png'
 import {

@@ -10,9 +10,9 @@ const Column = [
 export function TableAlunos() {
   return (
     <FiltroContainer title="Meus Alunos" selectOptions={selectOptions}>
-      <div className="h-[26rem] overflow-y-auto rounded-lg bg-purple-800 p-3">
+ 
         <TablePersonal columns={Column} datas={dados} />
-      </div>
+
     </FiltroContainer>
   );
 }
