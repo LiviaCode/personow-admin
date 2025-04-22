@@ -13,11 +13,11 @@ import {
   Send,
   UsersRound,
 } from 'lucide-react'
-// import Image from 'next/image'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-// import logo from '@/assets/logo.png'
+import logo from '@/assets/logo.png'
 import {
   Sidebar,
   SidebarContent,
@@ -81,14 +81,14 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup className="space-y-6">
           <SidebarGroupLabel className="mt-6 flex justify-center pt-2">
-            {/* <Image
+             <Image
               src={logo}
-              width={350}
-              height={350}
+              width={120}
+              height={120}
               alt=""
               style={{ width: 'auto', height: 'auto' }}
               priority
-            /> */}
+            /> 
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
