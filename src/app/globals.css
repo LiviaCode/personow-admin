@@ -109,7 +109,9 @@
 button.fc-button.fc-button-primary {
   background-color: orange;
 }
-
+.fc-button-group {
+  width: 10vw;
+}
 .fc-toolbar-title {
   color: orange;
   font-weight: 900;
@@ -117,6 +119,24 @@ button.fc-button.fc-button-primary {
 
 .fc-col-header {
   border: 3px solid orange;
+}
+
+@media (max-width: 768px) {
+  .fc-header-toolbar {
+    flex-wrap: wrap;
+    /* gap: 0.5rem; */
+    justify-content: space-between !important;
+    font-size: 0.5rem;
+  }
+
+  .fc-timegrid-body {
+    font-size: 0.6rem;
+  }
+
+  .fc .fc-col-header-cell-cushion {
+    white-space: nowrap;
+    font-size: 0.6rem;
+  }
 }
 
 @layer base {
