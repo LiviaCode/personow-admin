@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 
-
 export const metadata: Metadata = {
-  title: 'Personow | Admin',
+  title: 'Personow ',
 }
 
 export default function PrivateLayout({

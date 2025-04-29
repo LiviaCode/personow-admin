@@ -18,9 +18,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
 // import { useGetProfile } from '@/hooks/use-query-data'
 // import { auth } from '@/lib/firebase'
-
 import { ThemeToggle } from './theme/theme-toggle'
 import { Skeleton } from './ui/skeleton'
 
@@ -30,19 +30,19 @@ export function Header() {
 
   const isAdminPage = pathname === '/admin'
 
-//   const { data, isPending } = useGetProfile()
+  //   const { data, isPending } = useGetProfile()
 
-//   async function handleDisconnect() {
-//     await signOut(auth)
-//     deleteCookie('token')
-//     router.push('/')
-//   }
+  //   async function handleDisconnect() {
+  //     await signOut(auth)
+  //     deleteCookie('token')
+  //     router.push('/')
+  //   }
 
   return (
     <header className="flex w-full items-center justify-between px-6 py-4">
       {isAdminPage && (
         <h1 className="text-2xl font-semibold text-text-web">
-          Bem Vindo 
+          Bem Vindo
           {/* {data?.name.split(' ')[0]}! */}
         </h1>
       )}
@@ -91,13 +91,11 @@ export function Header() {
                 size="icon"
                 className="rounded-full bg-transparent"
               >
-               
-                  <Skeleton className="size-8 rounded-full" />
-            
-                  <Avatar className="size-8">
+                <Skeleton className="size-8 rounded-full" />
+
+                <Avatar className="size-8">
                   <AvatarImage src="https://github.com/shadcn.png" />
-                  </Avatar>
-           
+                </Avatar>
               </Button>
             </DropdownMenuTrigger>
 
@@ -124,7 +122,7 @@ export function Header() {
 
               <DropdownMenuSeparator />
 
-              <DropdownMenuItem >
+              <DropdownMenuItem>
                 <LogOut />
                 <span>Desconectar</span>
               </DropdownMenuItem>

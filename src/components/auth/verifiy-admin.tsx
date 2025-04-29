@@ -1,3 +1,1 @@
-export function VerifyAdmin(){
-    
-}
+export function VerifyAdmin() {}

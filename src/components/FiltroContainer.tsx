@@ -1,17 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Search } from "lucide-react";
+import { Search } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 
 type Option = {
-  label: string;
-  value: string;
-};
+  label: string
+  value: string
+}
 
 type FiltroContainerProps = {
-  title: string;
-  selectOptions: Option[];
-  children: React.ReactNode;
-} & React.ComponentProps<"input">;
+  title: string
+  selectOptions: Option[]
+  children: React.ReactNode
+} & React.ComponentProps<'input'>
 
 export function FiltroContainer({
   title,
@@ -46,5 +47,5 @@ export function FiltroContainer({
       </div>
       {children}
     </div>
-  );
+  )
 }

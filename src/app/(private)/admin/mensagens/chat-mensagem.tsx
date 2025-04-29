@@ -1,10 +1,11 @@
-import { ImageIcon } from "lucide-react";
-import { MensagemProps, Mensagem } from "../../../../components/mensagem";
+import { ImageIcon } from 'lucide-react'
+
+import { Mensagem, MensagemProps } from '../../../../components/mensagem'
 
 const mensagens: MensagemProps[] = [
-  { texto: "Olá, como vai?", hora: "22:50", tipo: "enviada" },
-  { texto: "Estou bem tbm", hora: "22:55", tipo: "recebida" },
-];
+  { texto: 'Olá, como vai?', hora: '22:50', tipo: 'enviada' },
+  { texto: 'Estou bem tbm', hora: '22:55', tipo: 'recebida' },
+]
 
 export function ChatMensagem() {
   return (
@@ -30,5 +31,5 @@ export function ChatMensagem() {
         ></input>
       </div>
     </div>
-  );
+  )
 }

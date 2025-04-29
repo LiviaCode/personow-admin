@@ -1,17 +1,17 @@
-import { ChatMensagem } from "./chat-mensagem";
-import { PreviaMensagem } from "./previa-mensagem";
-import { FiltroContainer } from "../../../../components/FiltroContainer";
+import { FiltroContainer } from '../../../../components/FiltroContainer'
+import { ChatMensagem } from './chat-mensagem'
+import { PreviaMensagem } from './previa-mensagem'
 
 const previaMensagens = [
-  { nome: "Stefanie Rodrigies", mensagem: "Lorem ipsum dolor sit amet." },
-  { nome: "Helena ferreira", mensagem: "Lorem ipsum dolor sit amet." },
-];
+  { nome: 'Stefanie Rodrigies', mensagem: 'Lorem ipsum dolor sit amet.' },
+  { nome: 'Helena ferreira', mensagem: 'Lorem ipsum dolor sit amet.' },
+]
 
 const selectOptions = [
-  { label: "Todas", value: "msgTodas" },
-  { label: "Lidas", value: "msgLidas" },
-  { label: "Não lidas", value: "msgNaoLidas" },
-];
+  { label: 'Todas', value: 'msgTodas' },
+  { label: 'Lidas', value: 'msgLidas' },
+  { label: 'Não lidas', value: 'msgNaoLidas' },
+]
 
 export default function PageMensagens() {
   return (
@@ -28,5 +28,5 @@ export default function PageMensagens() {
         </div>
       </div>
     </FiltroContainer>
-  );
+  )
 }

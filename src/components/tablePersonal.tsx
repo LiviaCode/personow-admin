@@ -1,9 +1,11 @@
-import { Button } from "@/components/ui/button";
+import { MoreHorizontal, NotebookText } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import {
   Table,
   TableBody,
@@ -11,24 +13,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { MoreHorizontal, NotebookText } from "lucide-react";
+} from '@/components/ui/table'
 
 type Column = {
-  key: string;
-  label: string;
-};
+  key: string
+  label: string
+}
 
-type RowData = Record<string, string | number | boolean>;
+type RowData = Record<string, string | number | boolean>
 
 type TabelaProps = {
-  columns: Column[];
-  datas: RowData[];
-};
+  columns: Column[]
+  datas: RowData[]
+}
 
 export default function TablePersonal({ columns, datas }: TabelaProps) {
   return (
-    <Table className="w-full overflow-hidden rounded-lg shadow-xl border-collapse bg-purple-800">
+    <Table className="w-full border-collapse overflow-hidden rounded-lg bg-purple-800 shadow-xl">
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
@@ -72,5 +73,5 @@ export default function TablePersonal({ columns, datas }: TabelaProps) {
         ))}
       </TableBody>
     </Table>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import { TableAlunos } from "./table-alunos";
+import { TableAlunos } from './table-alunos'
 
-export default function MeusAlunos(){
-    return <TableAlunos></TableAlunos>
+export default function MeusAlunos() {
+  return <TableAlunos></TableAlunos>
 }

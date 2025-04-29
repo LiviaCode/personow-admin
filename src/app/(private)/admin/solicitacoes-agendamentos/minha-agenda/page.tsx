@@ -1,5 +1,5 @@
-import Agenda from "./agenda";
+import Agenda from './agenda'
 
 export default function AgendaPage() {
-  return <Agenda></Agenda>;
+  return <Agenda></Agenda>
 }

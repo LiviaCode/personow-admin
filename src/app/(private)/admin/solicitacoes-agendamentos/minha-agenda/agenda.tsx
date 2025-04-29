@@ -1,31 +1,32 @@
-"use client";
-import React, { useState } from "react";
-import PopupModal from "./popup";
-import FullCalendar from "@fullcalendar/react";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import dayGridPlugin from "@fullcalendar/daygrid";
+'use client'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import FullCalendar from '@fullcalendar/react'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import React, { useState } from 'react'
+
+import PopupModal from './popup'
 
 type novoEvento = {
-  title: string;
-  start: string;
-  end: string;
-};
+  title: string
+  start: string
+  end: string
+}
 
 export default function Agenda() {
-  const [events, setEvents] = useState(evento);
+  const [events, setEvents] = useState(evento)
 
-  const [popupModal, setPopupModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [popupModal, setPopupModal] = useState(false)
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   const onDateClick = (info: { dateStr: string }) => {
-    setSelectedDate(info.dateStr);
-    setPopupModal(true);
-  };
+    setSelectedDate(info.dateStr)
+    setPopupModal(true)
+  }
 
   const addEvento = (evento: novoEvento) => {
-    setEvents([evento]);
-  };
+    setEvents([evento])
+  }
 
   // const onEventClick = (info) => {
   //   console.log(info);
@@ -53,9 +54,9 @@ export default function Agenda() {
           editable={true}
           height="460px"
           headerToolbar={{
-            right: "today prev,next",
-            center: "title",
-            left: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: 'today prev,next',
+            center: 'title',
+            left: 'dayGridMonth,timeGridWeek,timeGridDay',
           }}
         />
         {popupModal && (
@@ -67,8 +68,8 @@ export default function Agenda() {
         )}
       </div>
     </div>
-  );
+  )
 }
 
 // TESTEEE - APAGAR DEPOIS - colocar dados retornado da API
-const evento = [{}];
+const evento = [{}]

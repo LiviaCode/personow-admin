@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-dayjs.locale("pt-br");
+import 'dayjs/locale/pt-br'
+
+import dayjs from 'dayjs'
+import { X } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+
+import { Button } from '@/components/ui/button'
+dayjs.locale('pt-br')
 
 type novoEvento = {
-  title: string;
-  start: string;
-  end: string;
-};
+  title: string
+  start: string
+  end: string
+}
 
 type PopupModalProps = {
-  onClose: () => void;
-  addEvent: (evento: novoEvento) => void;
-  dateTime: string | null;
-};
+  onClose: () => void
+  addEvent: (evento: novoEvento) => void
+  dateTime: string | null
+}
 
 export default function PopupModal({
   onClose,
@@ -23,38 +25,38 @@ export default function PopupModal({
   dateTime,
 }: PopupModalProps) {
   // ESTADOS para inputs
-  const [horaInicio, setHoraInicio] = useState("");
-  const [horaFim, setHoraFim] = useState("");
-  const [diaTodo, setDiaTodo] = useState(false);
+  const [horaInicio, setHoraInicio] = useState('')
+  const [horaFim, setHoraFim] = useState('')
+  const [diaTodo, setDiaTodo] = useState(false)
 
   // Atualiza os horários de início e fim quando o dateTime mudar
   useEffect(() => {
     if (dateTime) {
-      const data = dayjs(dateTime);
-      setHoraInicio(data.format("HH:mm"));
-      setHoraFim(data.add(1, "hour").format("HH:mm"));
+      const data = dayjs(dateTime)
+      setHoraInicio(data.format('HH:mm'))
+      setHoraFim(data.add(1, 'hour').format('HH:mm'))
     }
-  }, [dateTime]);
+  }, [dateTime])
 
-  const data = dayjs(dateTime);
-  const dataStr = data.format("D [de] MMMM [de] YYYY");
+  const data = dayjs(dateTime)
+  const dataStr = data.format('D [de] MMMM [de] YYYY')
 
   const formataData = (hora: string) => {
-    const [h, m] = hora.split(":");
-    return data.hour(parseInt(h)).minute(parseInt(m)).second(0);
-  };
+    const [h, m] = hora.split(':')
+    return data.hour(parseInt(h)).minute(parseInt(m)).second(0)
+  }
 
   const confirmarEvento = () => {
-    const start = formataData(diaTodo ? "00:00" : horaInicio);
-    const end = formataData(diaTodo ? "23:59" : horaFim);
+    const start = formataData(diaTodo ? '00:00' : horaInicio)
+    const end = formataData(diaTodo ? '23:59' : horaFim)
 
     addEvent({
-      title: "Desabilitado",
+      title: 'Desabilitado',
       start: start.toISOString(),
       end: end.toISOString(),
-    });
-    onClose();
-  };
+    })
+    onClose()
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex h-full items-center justify-center bg-black bg-opacity-55">
@@ -119,5 +121,5 @@ export default function PopupModal({
         </Button>
       </div>
     </div>
-  );
+  )
 }

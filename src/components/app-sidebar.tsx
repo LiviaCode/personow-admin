@@ -30,65 +30,65 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+} from '@/components/ui/sidebar'
 
 interface SubItemProps {
-  title: string;
-  url: string;
+  title: string
+  url: string
 }
 
 interface ItemsProps {
-  title: string;
-  url: string;
-  icon: LucideIcon;
-  subItems?: SubItemProps[];
+  title: string
+  url: string
+  icon: LucideIcon
+  subItems?: SubItemProps[]
 }
 
 const items: ItemsProps[] = [
   {
-    title: "Dashboard",
-    url: "/admin",
+    title: 'Dashboard',
+    url: '/admin',
     icon: ChartNoAxesCombined,
   },
   {
-    title: "Meus Alunos",
-    url: "/admin/meus-alunos",
+    title: 'Meus Alunos',
+    url: '/admin/meus-alunos',
     icon: UsersRound,
   },
   {
-    title: "Mensagens",
-    url: "/admin/mensagens",
+    title: 'Mensagens',
+    url: '/admin/mensagens',
     icon: Mail,
   },
   {
-    title: "Solicitações de Agendamentos",
-    url: "/admin/solicitacoes-agendamentos",
+    title: 'Solicitações de Agendamentos',
+    url: '/admin/solicitacoes-agendamentos',
     icon: Send,
     subItems: [
       {
-        title: "Minha Agenda",
-        url: "/admin/solicitacoes-agendamentos/minha-agenda",
+        title: 'Minha Agenda',
+        url: '/admin/solicitacoes-agendamentos/minha-agenda',
       },
     ],
   },
-];
+]
 
 export function AppSidebar() {
-  const pathName = usePathname();
+  const pathName = usePathname()
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup className="space-y-6">
           <SidebarGroupLabel className="mt-6 flex justify-center pt-2">
-             <Image
+            <Image
               src={logo}
               width={120}
               height={120}
               alt=""
               style={{ width: 'auto', height: 'auto' }}
               priority
-            /> 
+            />
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -96,7 +96,7 @@ export function AppSidebar() {
 
             <SidebarMenu className="space-y-2">
               {items.map((item) => {
-                const isActive = pathName === item.url;
+                const isActive = pathName === item.url
 
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -150,12 +150,12 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     )}
                   </SidebarMenuItem>
-                );
+                )
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  );
+  )
 }
