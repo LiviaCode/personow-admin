@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react'
+import { Search, SlidersHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -10,7 +10,7 @@ type Option = {
 
 type FiltroContainerProps = {
   title: string
-  selectOptions: Option[]
+  selectOptions?: Option[]
   children: React.ReactNode
 } & React.ComponentProps<'input'>
 
@@ -27,23 +27,50 @@ export function FiltroContainer({
       <Separator />
 
       <div className="flex items-center justify-start">
-        <label htmlFor="filter">Filtros: </label>
+        <label htmlFor="filter" className="md:mr-2">
+          Filtros:{' '}
+        </label>
         <input
           name="filter"
           type="text"
           placeholder="Nome"
-          className="basis-2xs mx-8 rounded-[8px] border border-secondary-web p-2 focus:outline-none"
+          className="w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none"
         ></input>
-        <select className="basis-2xs mx-8 w-36 rounded-[8px] border border-secondary-web p-2 focus:outline-none">
-          {selectOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        <Button className="mx-8">
+        {selectOptions && (
+          <select className="mx-3 w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none">
+            {selectOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        )}
+        <Button className="w-full max-w-[50px] md:w-auto">
           <Search />
         </Button>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+export function MobileFiltroContainer({
+  title,
+  children,
+}: FiltroContainerProps) {
+  return (
+    <div className="h-full space-y-4 rounded-t-[20px] bg-purple-900 p-3 text-gray-200">
+      <h1 className="text-2xl font-semibold">{title}</h1>
+      <div className="flex items-center justify-start space-x-2">
+        <input
+          name="filter"
+          type="text"
+          placeholder="Pesquisar"
+          className="w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none"
+        ></input>
+        <button className="rounded-[8px] bg-orange-500 p-2 focus:outline-none">
+          <SlidersHorizontal />
+        </button>
       </div>
       {children}
     </div>

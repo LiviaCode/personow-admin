@@ -59,8 +59,8 @@ export default function PopupModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex h-full items-center justify-center bg-black bg-opacity-55">
-      <div className="flex w-1/4 flex-col gap-1 rounded-xl bg-white p-6 shadow-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-55">
+      <div className="m-2 flex w-full max-w-md flex-col gap-1 rounded-xl bg-white p-6 shadow-lg">
         <div className="flex justify-end">
           <button onClick={onClose}>
             <X className="text-orange-500 transition-colors hover:text-orange-600" />
@@ -84,7 +84,7 @@ export default function PopupModal({
             value={horaInicio}
             onChange={(e) => setHoraInicio(e.target.value)}
             disabled={diaTodo}
-            className="w-1/3 rounded-md border border-orange-300 p-2 text-center text-gray-700"
+            className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
           />
 
           <label htmlFor="fim" className="text-sm font-medium text-gray-700">
@@ -96,7 +96,7 @@ export default function PopupModal({
             value={horaFim}
             onChange={(e) => setHoraFim(e.target.value)}
             disabled={diaTodo}
-            className="w-1/3 rounded-md border border-orange-300 p-2 text-center text-gray-700"
+            className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
           />
         </div>
 
