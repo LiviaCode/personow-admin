@@ -1,32 +1,33 @@
 import { ChevronLeft, ImageIcon } from "lucide-react";
 
 import { Mensagem, MensagemProps } from "./mensagem";
+import Link from "next/link";
 
-type ChatMensagemProps = {
-  usuario: string;
+export type ChatData = {
+  nome: string;
   mensagens: MensagemProps[];
-  handleClickBack: (e: React.MouseEvent) => void;
 };
 
-export function MessageInput({
-  usuario,
-  mensagens,
-  handleClickBack,
-}: ChatMensagemProps) {
+type ChatScreenProps = {
+  chatData: ChatData;
+  backUrl: string;
+};
+
+export function ChatScreen({ chatData, backUrl }: ChatScreenProps) {
   return (
     <div className="flex h-full flex-col justify-between rounded-t-[20px] bg-purple-900 text-white">
       <div className="flex items-center rounded-[20px]">
         <div className="row-span-2 flex w-20 items-center justify-center space-x-2 p-2">
-          <a onClick={handleClickBack} href="#">
+          <Link href={backUrl}>
             <ChevronLeft className="size-5 text-orange-500" />
-          </a>
+          </Link>
           <ImageIcon className="size-10 text-gray-300" />
         </div>
-        <h2 className="w-60 font-bold">{usuario}</h2>
+        <h2 className="w-60 font-bold">{chatData.nome}</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto bg-purple-800 p-3">
-        {mensagens.map((msg, index) => (
+        {chatData.mensagens.map((msg, index) => (
           <Mensagem key={index} {...msg} />
         ))}
       </div>
