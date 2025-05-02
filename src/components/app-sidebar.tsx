@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@radix-ui/react-collapsible'
+} from "@radix-ui/react-collapsible";
 import {
   ChartNoAxesCombined,
   ChevronDown,
@@ -12,12 +12,12 @@ import {
   Mail,
   Send,
   UsersRound,
-} from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import logo from '@/assets/logo.png'
+import logo from "@/assets/logo.png";
 import {
   Sidebar,
   SidebarContent,
@@ -30,51 +30,26 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
-} from '@/components/ui/sidebar'
+} from "@/components/ui/sidebar";
 
 interface SubItemProps {
-  title: string
-  url: string
+  title: string;
+  url: string;
 }
 
-interface ItemsProps {
-  title: string
-  url: string
-  icon: LucideIcon
-  subItems?: SubItemProps[]
+export interface ItemsProps {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+  subItems?: SubItemProps[];
 }
 
-const items: ItemsProps[] = [
-  {
-    title: 'Dashboard',
-    url: '/admin',
-    icon: ChartNoAxesCombined,
-  },
-  {
-    title: 'Meus Alunos',
-    url: '/admin/meus-alunos',
-    icon: UsersRound,
-  },
-  {
-    title: 'Mensagens',
-    url: '/admin/mensagens',
-    icon: Mail,
-  },
-  {
-    title: 'Solicitações de Agendamentos',
-    url: '/admin/solicitacoes-agendamentos',
-    icon: Send,
-    subItems: [
-      {
-        title: 'Minha Agenda',
-        url: '/admin/solicitacoes-agendamentos/minha-agenda',
-      },
-    ],
-  },
-]
+interface AppSidebarProps {
+  items: ItemsProps[];
+}
 
-export function AppSidebar() {
-  const pathName = usePathname()
+export function AppSidebar({ items }: AppSidebarProps) {
+  const pathName = usePathname();
 
   return (
     <Sidebar>
@@ -86,7 +61,7 @@ export function AppSidebar() {
               width={120}
               height={120}
               alt=""
-              style={{ width: 'auto', height: 'auto' }}
+              style={{ width: "auto", height: "auto" }}
               priority
             />
           </SidebarGroupLabel>
@@ -96,7 +71,7 @@ export function AppSidebar() {
 
             <SidebarMenu className="space-y-2">
               {items.map((item) => {
-                const isActive = pathName === item.url
+                const isActive = pathName === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -150,12 +125,12 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     )}
                   </SidebarMenuItem>
-                )
+                );
               })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

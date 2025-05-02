@@ -10,26 +10,56 @@
 // import { Separator } from '@/components/ui/separator'
 // import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 // =======
-'use client'
+"use client";
 
-import { usePathname } from 'next/navigation'
-import { Suspense } from 'react'
+import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
-import { AppSidebar } from '@/components/app-sidebar'
+import { AppSidebar, ItemsProps } from "@/components/app-sidebar";
 // import { VerifyAdmin } from '@/components/auth/verify-admin'
-import { Header } from '@/components/header'
-import { Separator } from '@/components/ui/separator'
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { Header } from "@/components/header";
+import { Separator } from "@/components/ui/separator";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
+
+const items: ItemsProps[] = [
+  {
+    title: "Dashboard",
+    url: "/admin",
+    icon: ChartNoAxesCombined,
+  },
+  {
+    title: "Meus Alunos",
+    url: "/admin/meus-alunos",
+    icon: UsersRound,
+  },
+  {
+    title: "Mensagens",
+    url: "/admin/mensagens",
+    icon: Mail,
+  },
+  {
+    title: "Solicitações de Agendamentos",
+    url: "/admin/solicitacoes-agendamentos",
+    icon: Send,
+    subItems: [
+      {
+        title: "Minha Agenda",
+        url: "/admin/solicitacoes-agendamentos/minha-agenda",
+      },
+    ],
+  },
+];
 
 export default function ProvidersAdmin({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar items={items} />
 
         <SidebarTrigger className="mt-5 px-2 text-text-web opacity-80 hover:opacity-100" />
 
@@ -57,5 +87,5 @@ export default function ProvidersAdmin({
         </div>
       </SidebarProvider>
     </>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-import { Search, SlidersHorizontal } from 'lucide-react'
+import { Search, SlidersHorizontal } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 type Option = {
-  label: string
-  value: string
-}
+  label: string;
+  value: string;
+};
 
 type FiltroContainerProps = {
-  title: string
-  selectOptions?: Option[]
-  children: React.ReactNode
-} & React.ComponentProps<'input'>
+  title: string;
+  selectOptions?: Option[];
+  children: React.ReactNode;
+} & React.ComponentProps<"input">;
 
 export function FiltroContainer({
   title,
@@ -28,7 +28,7 @@ export function FiltroContainer({
 
       <div className="flex items-center justify-start">
         <label htmlFor="filter" className="md:mr-2">
-          Filtros:{' '}
+          Filtros:{" "}
         </label>
         <input
           name="filter"
@@ -51,7 +51,7 @@ export function FiltroContainer({
       </div>
       {children}
     </div>
-  )
+  );
 }
 
 export function MobileFiltroContainer({
@@ -59,20 +59,20 @@ export function MobileFiltroContainer({
   children,
 }: FiltroContainerProps) {
   return (
-    <div className="h-full space-y-4 rounded-t-[20px] bg-purple-900 p-3 text-gray-200">
-      <h1 className="text-2xl font-semibold">{title}</h1>
+    <div className="h-full space-y-4 rounded-t-[15px] bg-purple-900 p-3 text-gray-200">
+      <h1 className="text-lg font-semibold">{title}</h1>
       <div className="flex items-center justify-start space-x-2">
         <input
           name="filter"
           type="text"
           placeholder="Pesquisar"
-          className="w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none"
+          className="h-8 w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none"
         ></input>
-        <button className="rounded-[8px] bg-orange-500 p-2 focus:outline-none">
-          <SlidersHorizontal />
+        <button className="h-8 rounded-[8px] bg-orange-500 p-2 focus:outline-none">
+          <SlidersHorizontal size={15} />
         </button>
       </div>
       {children}
     </div>
-  )
+  );
 }

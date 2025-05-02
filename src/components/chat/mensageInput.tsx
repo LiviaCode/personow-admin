@@ -1,17 +1,18 @@
-import { ChevronLeft, ImageIcon } from 'lucide-react'
+import { ChevronLeft, ImageIcon } from "lucide-react";
 
-import { Mensagem, MensagemProps } from '../../../../components/mensagem'
+import { Mensagem, MensagemProps } from "./mensagem";
 
 type ChatMensagemProps = {
-  handleClickBack: (e: React.MouseEvent) => void
-}
+  usuario: string;
+  mensagens: MensagemProps[];
+  handleClickBack: (e: React.MouseEvent) => void;
+};
 
-const mensagens: MensagemProps[] = [
-  { texto: 'Olá, como vai?', hora: '22:50', tipo: 'enviada' },
-  { texto: 'Estou bem tbm', hora: '22:55', tipo: 'recebida' },
-]
-
-export function ChatMensagem({ handleClickBack }: ChatMensagemProps) {
+export function MessageInput({
+  usuario,
+  mensagens,
+  handleClickBack,
+}: ChatMensagemProps) {
   return (
     <div className="flex h-full flex-col justify-between rounded-t-[20px] bg-purple-900 text-white">
       <div className="flex items-center rounded-[20px]">
@@ -21,7 +22,7 @@ export function ChatMensagem({ handleClickBack }: ChatMensagemProps) {
           </a>
           <ImageIcon className="size-10 text-gray-300" />
         </div>
-        <h2 className="w-60 font-bold">Nome Sobrenome</h2>
+        <h2 className="w-60 font-bold">{usuario}</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto bg-purple-800 p-3">
@@ -38,5 +39,5 @@ export function ChatMensagem({ handleClickBack }: ChatMensagemProps) {
         ></input>
       </div>
     </div>
-  )
+  );
 }
