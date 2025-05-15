@@ -38,36 +38,7 @@ export default function Agenda() {
         Minha Agenda
       </div>
       <span>Selecione os horários que deseja desabilitar</span>
-      {/* <<<<<<< HEAD
 
-      <div className="h-[500px] rounded-[8px] bg-white p-3 text-black shadow-lg">
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView="timeGridWeek"
-          slotMinTime="08:00:00"
-          slotMaxTime="20:00:00"
-          allDaySlot={false}
-          events={events}
-          // eventClick={onEventClick}
-          dateClick={onDateClick}
-          locale="pt-br"
-          nowIndicator={true}
-          editable={true}
-          height="460px"
-          headerToolbar={{
-            right: 'today prev,next',
-            center: 'title',
-            left: 'dayGridMonth,timeGridWeek,timeGridDay',
-          }}
-        />
-        {popupModal && (
-          <PopupModal
-            onClose={() => setPopupModal(false)}
-            addEvent={addEvento}
-            dateTime={selectedDate}
-          ></PopupModal>
-        )}
-======= */}
       <div className="overflow-x-auto">
         <div className="h-[500px] min-w-[600px] rounded-[8px] bg-white p-3 text-black shadow-lg">
           <FullCalendar

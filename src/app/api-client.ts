@@ -2,7 +2,7 @@ import { type CookiesFn, getCookie } from 'cookies-next'
 import ky from 'ky'
 
 export const api = ky.create({
-  prefixUrl: '',
+  prefixUrl: 'http://34.151.231.108/api/',
 
   hooks: {
     beforeRequest: [

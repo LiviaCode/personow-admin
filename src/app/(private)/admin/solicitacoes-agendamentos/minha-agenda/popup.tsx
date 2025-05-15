@@ -1,12 +1,20 @@
+'use client'
+
 import 'dayjs/locale/pt-br'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import dayjs from 'dayjs'
 import { X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
+import { createAgenda } from '@/app/http/agenda'
 import { Button } from '@/components/ui/button'
+
+
 dayjs.locale('pt-br')
 
+// Tipagem do evento
 type novoEvento = {
   title: string
   start: string
@@ -19,42 +27,59 @@ type PopupModalProps = {
   dateTime: string | null
 }
 
-export default function PopupModal({
-  onClose,
-  addEvent,
-  dateTime,
-}: PopupModalProps) {
-  // ESTADOS para inputs
-  const [horaInicio, setHoraInicio] = useState('')
-  const [horaFim, setHoraFim] = useState('')
-  const [diaTodo, setDiaTodo] = useState(false)
+// Schema de validação
+const formSchema = z.object({
+  horaInicio: z.string().min(1, 'Obrigatório'),
+  horaFim: z.string().min(1, 'Obrigatório'),
+  diaTodo: z.boolean(),
+})
 
-  // Atualiza os horários de início e fim quando o dateTime mudar
-  useEffect(() => {
-    if (dateTime) {
-      const data = dayjs(dateTime)
-      setHoraInicio(data.format('HH:mm'))
-      setHoraFim(data.add(1, 'hour').format('HH:mm'))
-    }
-  }, [dateTime])
+type FormData = z.infer<typeof formSchema>
 
+export default function PopupModal({ onClose, addEvent, dateTime }: PopupModalProps) {
   const data = dayjs(dateTime)
   const dataStr = data.format('D [de] MMMM [de] YYYY')
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+ 
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      horaInicio: data.format('HH:mm'),
+      horaFim: data.add(1, 'hour').format('HH:mm'),
+      diaTodo: false,
+    },
+  })
+
+  const diaTodo = watch('diaTodo')
 
   const formataData = (hora: string) => {
     const [h, m] = hora.split(':')
     return data.hour(parseInt(h)).minute(parseInt(m)).second(0)
   }
 
-  const confirmarEvento = () => {
-    const start = formataData(diaTodo ? '00:00' : horaInicio)
-    const end = formataData(diaTodo ? '23:59' : horaFim)
+  const onSubmit = async (form: FormData) => {
+    const start = formataData(form.diaTodo ? '00:00' : form.horaInicio)
+    const end = formataData(form.diaTodo ? '23:59' : form.horaFim)
 
+    await createAgenda({
+      title: 'Desabilitado',
+      date_init: start.format('YYYY-MM-DD HH:mm:ss'),
+      date_end: end.format('YYYY-MM-DD HH:mm:ss'),
+      personal_id: 4,
+    })
+
+   
     addEvent({
       title: 'Desabilitado',
       start: start.toISOString(),
       end: end.toISOString(),
     })
+
     onClose()
   }
 
@@ -67,58 +92,52 @@ export default function PopupModal({
           </button>
         </div>
 
-        <h1 className="text-center text-xl font-semibold text-orange-500">
-          {dataStr}
-        </h1>
-        <p className="text-center text-sm text-gray-500">
-          Confirme o horário que deseja desabilitar
-        </p>
+        <h1 className="text-center text-xl font-semibold text-orange-500">{dataStr}</h1>
+        <p className="text-center text-sm text-gray-500">Confirme o horário que deseja desabilitar</p>
 
-        <div className="flex flex-col items-center gap-2 p-4">
-          <label htmlFor="inicio" className="text-sm font-medium text-gray-700">
-            Horário de início:
-          </label>
-          <input
-            id="inicio"
-            type="time"
-            value={horaInicio}
-            onChange={(e) => setHoraInicio(e.target.value)}
-            disabled={diaTodo}
-            className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
-          />
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+          <div className="flex flex-col items-center gap-2 p-4">
+            <label htmlFor="horaInicio" className="text-sm font-medium text-gray-700">
+              Início:
+            </label>
+            <input
+              id="horaInicio"
+              type="time"
+              {...register('horaInicio')}
+              disabled={diaTodo}
+              className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
+            />
+            {errors.horaInicio && <p className="text-sm text-red-500">{errors.horaInicio.message}</p>}
 
-          <label htmlFor="fim" className="text-sm font-medium text-gray-700">
-            Até:
-          </label>
-          <input
-            id="fim"
-            type="time"
-            value={horaFim}
-            onChange={(e) => setHoraFim(e.target.value)}
-            disabled={diaTodo}
-            className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
-          />
-        </div>
+            <label htmlFor="horaFim" className="text-sm font-medium text-gray-700">
+              Até:
+            </label>
+            <input
+              id="horaFim"
+              type="time"
+              {...register('horaFim')}
+              disabled={diaTodo}
+              className="w-2/3 rounded-md border border-orange-300 p-2 text-center text-gray-700 md:w-1/3"
+            />
+            {errors.horaFim && <p className="text-sm text-red-500">{errors.horaFim.message}</p>}
+          </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            id="allDay"
-            type="checkbox"
-            checked={diaTodo}
-            onChange={(e) => setDiaTodo(e.target.checked)}
-            className="accent-orange-500"
-          />
-          <label htmlFor="allDay" className="text-sm text-gray-700">
-            O dia todo
-          </label>
-        </div>
+          <div className="flex items-center gap-2">
+            <input
+              id="diaTodo"
+              type="checkbox"
+              {...register('diaTodo')}
+              className="accent-orange-500"
+            />
+            <label htmlFor="diaTodo" className="text-sm text-gray-700">
+              O dia todo
+            </label>
+          </div>
 
-        <Button
-          onClick={confirmarEvento} // Agora chama confirmarEvento para adicionar o evento
-          className="mt-2 w-full bg-purple-800 font-semibold text-white transition-colors hover:bg-purple-900"
-        >
-          Confirmar
-        </Button>
+          <Button type="submit" className="w-full bg-purple-800 text-white hover:bg-purple-900">
+            Confirmar
+          </Button>
+        </form>
       </div>
     </div>
   )

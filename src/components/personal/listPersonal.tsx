@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ChevronRightIcon, ImageIcon } from "lucide-react";
+import Link from "next/link";
 
 type Personal = {
   id: string;

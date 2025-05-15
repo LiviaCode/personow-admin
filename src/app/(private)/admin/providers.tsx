@@ -1,17 +1,7 @@
-// <<<<<<< HEAD
-// 'use client'
 
-// import { usePathname } from 'next/navigation'
-// import { Suspense } from 'react'
-
-// import { AppSidebar } from '@/components/app-sidebar'
-// // import { VerifyAdmin } from '@/components/auth/verify-admin'
-// import { Header } from '@/components/header'
-// import { Separator } from '@/components/ui/separator'
-// import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-// =======
 "use client";
 
+import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
@@ -20,7 +10,6 @@ import { AppSidebar, ItemsProps } from "@/components/app-sidebar";
 import { Header } from "@/components/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
 
 const items: ItemsProps[] = [
   {
@@ -63,9 +52,6 @@ export default function ProvidersAdmin({
 
         <SidebarTrigger className="mt-5 px-2 text-text-web opacity-80 hover:opacity-100" />
 
-        {/* <<<<<<< HEAD
-//         <div className="grid h-screen w-full grid-rows-[auto_1fr]"> */}
-
         <div className="absolute left-0 top-0 z-20 grid h-screen w-full grid-rows-[auto_1fr] md:relative md:z-auto">
           <div>
             <Header />
@@ -75,12 +61,9 @@ export default function ProvidersAdmin({
             </div>
           </div>
 
-          {/* <<<<<<< HEAD
-          <div className="overflow-y-auto">
-======= */}
           <div className="overflow-y-auto md:pr-5">
             <Suspense key={pathname}>
-              {/* fallback={<LoaderPet full={false} />}> */}
+        
               {children}
             </Suspense>
           </div>
