@@ -1,10 +1,11 @@
 "use client";
 
 import { Slot } from "@radix-ui/react-slot";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cva, VariantProps } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 import * as React from "react";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";

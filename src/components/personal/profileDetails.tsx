@@ -1,5 +1,10 @@
+"use client";
 import { Calendar, ChevronLeft, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
+import PersonalAgenda from "@/app/(private)/alunos/personal/agenda";
 
 export type PersonalProps = {
   nome: string;
@@ -18,6 +23,8 @@ type ProfileDetailsProps = {
 };
 
 export function ProfileDetails({ personal }: ProfileDetailsProps) {
+  const [openAgenda, setOpenAgenda] = useState(false);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center text-white">
@@ -66,17 +73,27 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           </div>
         </div>
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-4">
-          <button className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-orange-500 p-2 text-orange-500 transition hover:bg-orange-500 hover:text-white">
+          <Link
+            href="/alunos/mensagens"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-orange-500 p-2 text-orange-500 transition hover:bg-orange-500 hover:text-white"
+          >
             <MessageCircleMore size={20} />
             Enviar mensagem
-          </button>
+          </Link>
 
-          <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-500 p-2 text-white transition hover:bg-orange-600">
+          <button
+            onClick={() => setOpenAgenda(true)}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-500 p-2 text-white transition hover:bg-orange-600"
+          >
             <Calendar size={20} />
             Marcar Reunião
           </button>
         </div>
       </div>
+
+      {openAgenda && (
+        <PersonalAgenda setAgenda={setOpenAgenda}></PersonalAgenda>
+      )}
     </>
   );
 }

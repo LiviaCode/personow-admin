@@ -1,7 +1,7 @@
 import { ChevronLeft, ImageIcon } from "lucide-react";
+import Link from "next/link";
 
 import { Mensagem, MensagemProps } from "./mensagem";
-import Link from "next/link";
 
 export type ChatData = {
   nome: string;

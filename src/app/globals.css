@@ -101,7 +101,48 @@
   }
 }
 
-/* Personaliza a borda da área do calendário */
+/* Personaliza o calendário */
+#calendarAluno .fc .fc-daygrid-day-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#calendarAluno .fc .fc-daygrid-day-top {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+/* Remove as bordas dos quadradinhos do calendário */
+#calendarAluno .fc-daygrid-day {
+  border: none !important;
+}
+#calendarAluno .fc-col-header-cell {
+  border: none !important;
+}
+#calendarAluno .fc-scrollgrid {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#calendarAluno .fc .fc-button {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+  color: inherit !important;
+}
+
+#calendarAluno .fc .fc-button .fc-icon {
+  color: orange; /* Ou a cor que você quiser para o ícone/texto */
+  font-size: 1.5rem;
+}
+
 .fc-today-button.fc-button.fc-button-primary {
   background-color: orange;
 }
@@ -121,6 +162,10 @@ button.fc-button.fc-button-primary {
   border: 3px solid orange;
 }
 
+#calendarAluno .fc-event-title {
+  width: 0.1px;
+  height: 0.1px;
+}
 @media (max-width: 768px) {
   .fc-header-toolbar {
     flex-wrap: wrap;

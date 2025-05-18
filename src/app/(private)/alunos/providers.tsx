@@ -1,28 +1,33 @@
 "use client";
 
-import { Suspense } from "react";
-import { Mail, Send, UsersRound } from "lucide-react";
+import { BicepsFlexed, Mail, Send, User } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 import { AppSidebar, ItemsProps } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const items: ItemsProps[] = [
   {
-    title: "Home",
+    title: "Procurar personal trainer",
     url: "/alunos/home",
-    icon: UsersRound,
+    icon: BicepsFlexed,
+  },
+  {
+    title: "Perfil",
+    url: "/alunos/perfil",
+    icon: User,
   },
   {
     title: "Mensagens",
     url: "/alunos/mensagens",
     icon: Mail,
   },
-  {
-    title: "Agenda",
-    url: "/alunos/minha-agenda",
-    icon: Send,
-  },
+  // {
+  //   title: "Agenda",
+  //   url: "/alunos/minha-agenda",
+  //   icon: Send,
+  // },
 ];
 
 export default function ProvidersAlunos({

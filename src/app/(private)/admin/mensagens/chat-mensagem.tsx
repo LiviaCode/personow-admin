@@ -1,6 +1,7 @@
 import { ImageIcon } from "lucide-react";
-import { MensagemProps, Mensagem } from "../../../../components/mensagem";
 import React from "react";
+
+import { Mensagem,MensagemProps } from "../../../../components/mensagem";
 
 const mensagens: MensagemProps[] = [
   { texto: "Olá, como vai?", hora: "22:50", tipo: "enviada" },
