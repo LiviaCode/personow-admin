@@ -1,26 +1,26 @@
-import './globals.css'
+import "./globals.css";
 
-import type { Metadata } from 'next'
-import { Roboto } from 'next/font/google'
+import type { Metadata } from "next";
+import { Roboto } from "next/font/google";
 
-import Providers from './providers'
+import Providers from "./providers";
 
-const roboto = Roboto({ subsets: ['latin'], weight: ['400', '500', '700'] })
+const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
-  title: 'Personow',
-}
+	title: "Personow",
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="pt-BR" className={roboto.className} suppressHydrationWarning>
-      <body className="antialiased">
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="pt-BR" className={roboto.className} suppressHydrationWarning>
+			<body className="antialiased">
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	);
 }

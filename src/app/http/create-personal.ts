@@ -5,9 +5,12 @@ export interface CreatePersonalRequest {
   email: string
   password: string
   descricao: string
-  area_atuacao: string
+  formacao: string
+  experiencia: string
+  cidade: string
   profissao: string
-  modelo_atendimento: string
+  areaAtuacao: string
+  modeloAtendimento: 'presencial' | 'online'
 }
 
 export interface CreatePersonalResponse {
@@ -17,28 +20,21 @@ export interface CreatePersonalResponse {
     email: string
     password: string
     descricao: string
-    area_atuacao: string
+    formacao: string
+    experiencia: string
+    cidade: string
     profissao: string
-    modelo_atendimento: string
+    areaAtuacao: string
+    modeloAtendimento: string
   }
 }
 
-export default async function createPersonal({
-  nome,
-  email,
-  password,
-}: CreatePersonalRequest) {
+export default async function createPersonal(data: CreatePersonalRequest) {
   try {
     const response = await api
       .post('personal/', {
         json: {
-          nome,
-          email,
-          password,
-          descricao: "string",
-          area_atuacao: "string",
-          profissao: "string",
-          modelo_atendimento: "Presencial"
+          data
         },
       })
       .json<CreatePersonalResponse>()

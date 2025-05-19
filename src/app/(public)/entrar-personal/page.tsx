@@ -13,7 +13,7 @@ type LoginFormData = {
   password: string
 }
 
-export default function Login() {
+export default function LoginPersonal() {
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ export default function Login() {
           Faça login com sua conta google ou insira suas informações abaixo.
         </p>
 
-        <Button className="mb-6 flex w-full items-center justify-center rounded border border-orange-400 bg-purple-900 p-3">
+        <Button className="mb-6 flex w-full items-center justify-center rounded border border-orange-400 bg-purple-900 p-3 hover:bg-purple-900">
           {/* botão para Google login, se quiser implementar depois */}
         </Button>
 
@@ -89,7 +89,7 @@ export default function Login() {
 
         <p className="mt-6 text-center text-xs">
           Não possui conta?{' '}
-          <a href="/registrar" className="font-bold text-white">
+          <a href="/registrar-personal" className="font-bold text-white">
             Cadastrar-se
           </a>
         </p>
