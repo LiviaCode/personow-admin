@@ -1,36 +1,43 @@
 "use client";
 import { Calendar, ChevronLeft, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import PersonalAgenda from "@/app/(private)/alunos/personal/agenda";
-
-export type PersonalProps = {
-  nome: string;
-  cidade: string;
-  profissao: string;
-  formacao: string;
-  experiencia: string;
-  areaAtuacao: string;
-  modeloAtendimento: string;
-  descricao: string;
-  fotoUrl: string; // Pode ser um caminho local ou uma URL externa
-};
+import createChat from "@/app/http/create-chat";
+import { getPersonalResponse } from "@/app/http/get-personal";
 
 type ProfileDetailsProps = {
-  personal: PersonalProps;
+  personal: getPersonalResponse;
 };
 
 export function ProfileDetails({ personal }: ProfileDetailsProps) {
   const [openAgenda, setOpenAgenda] = useState(false);
+  const router = useRouter();
+
+  async function onSubmit() {
+    const NewChat = {
+      usuario1_id: 1,
+      tipo_usuario1: "aluno",
+      usuario2_id: personal.id,
+      tipo_usuario2: "personal",
+    };
+    try {
+      const response = await createChat(NewChat);
+      console.log("Chat criado:", response.id);
+      router.push(`/alunos/mensagens/${response.id}`);
+    } catch (error) {
+      console.error("Erro ao cadastrar:", error);
+    }
+  }
 
   return (
     <>
       <div className="flex flex-col items-center justify-center text-white">
         <div className="text-center text-xs">
           <Image
-            src={personal.fotoUrl}
+            src={`http://localhost:3017/images/${personal.PersonalFotos.at(-1)?.filename ?? ""}`}
             alt={`Foto de ${personal.nome}`}
             width={120}
             height={120}
@@ -73,13 +80,13 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           </div>
         </div>
         <div className="mt-5 flex w-full flex-col items-center justify-center gap-4">
-          <Link
-            href="/alunos/mensagens"
+          <button
+            onClick={onSubmit}
             className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-orange-500 p-2 text-orange-500 transition hover:bg-orange-500 hover:text-white"
           >
             <MessageCircleMore size={20} />
             Enviar mensagem
-          </Link>
+          </button>
 
           <button
             onClick={() => setOpenAgenda(true)}

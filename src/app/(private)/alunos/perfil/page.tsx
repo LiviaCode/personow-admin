@@ -1,31 +1,17 @@
 import Image from "next/image";
 
+import { getAlunoResponse } from "@/app/http/get-aluno";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-type alunoProps = {
-  fotoUrl?: string;
-  nome: string;
-  dataNascimento: string;
-  genero: "Masculino" | "Feminino" | "Outro";
-  email: string;
-  celular: string;
-  altura?: number;
-  peso?: number;
-  condicaoMedica?: string;
-  historicoLesao?: string;
-  nivelAtividade?: "Sedentário" | "Moderado" | "Ativo";
-  objetivo?: string;
-};
-
-export default function PagePerfil(props: alunoProps) {
+export default function PagePerfil(props: getAlunoResponse) {
   const dadosPessoais = [
     { id: "nome", label: "Nome Completo", type: "text", value: props.nome },
     {
       id: "dataNasc",
       label: "Data de nascimento",
       type: "text",
-      value: props.dataNascimento,
+      value: props.dateNascimento,
     },
     { id: "email", label: "Email", type: "email", value: props.email },
     { id: "celular", label: "Celular", type: "text", value: props.celular },

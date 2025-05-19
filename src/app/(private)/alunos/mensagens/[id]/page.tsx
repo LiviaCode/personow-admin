@@ -1,24 +1,30 @@
-import { ChatData, ChatScreen } from "@/components/chat/chatScreen";
-import { MensagemProps } from "@/components/chat/mensagem";
+import { notFound } from "next/navigation";
 
-//Teste --- puxar da api os objetos
-const mensagen: MensagemProps[] = [
-  { texto: "Olá, como vai?", hora: "22:50", tipo: "enviada" },
-  { texto: "Estou bem tbm", hora: "22:55", tipo: "recebida" },
-];
+import getAllmessage from "@/app/http/get-all-message";
+import { ChatScreen } from "@/components/chat/chatScreen";
 
-const chatsData: Record<string, ChatData> = {
-  "1235": {
-    nome: "Renatinha",
-    mensagens: mensagen,
-  },
+type PageChatProps = {
+  params: Promise<{ id: string }>;
 };
 
-export default function PageChat({ params }: { params: { id: string } }) {
-  const chat = chatsData[params.id];
+export default async function PageChat({ params }: PageChatProps) {
+  const { id } = await params;
+  let chat;
+  try {
+    chat = await getAllmessage(id);
+  } catch {
+    chat = undefined;
+  }
+  if (!chat || chat?.length === 0) notFound();
+
   return (
-    <>
-      <ChatScreen chatData={chat} backUrl="/alunos/mensagens/"></ChatScreen>
-    </>
+    <ChatScreen
+      id={"1"}
+      messages={chat}
+      tipo_usuario="aluno"
+      backUrl="/alunos/mensagens/"
+      conversa_id={id}
+      remetente_id={"1"}
+    ></ChatScreen>
   );
 }
