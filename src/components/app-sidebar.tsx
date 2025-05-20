@@ -6,12 +6,8 @@ import {
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
 import {
-  ChartNoAxesCombined,
   ChevronDown,
   type LucideIcon,
-  Mail,
-  Send,
-  UsersRound,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

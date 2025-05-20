@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 
 import { profilePersonal } from '@/app/http/profile-personal'
 import { Label } from '@/components/label'
+import { Background } from '@/components/svg/background'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -39,7 +40,11 @@ export default function LoginPersonal() {
 
   return (
     <div className="flex h-screen">
-      <div className="flex-1 bg-purple-800"></div>
+           <div className="flex-1 relative overflow-hidden bg-purple-800">
+           <Background
+           className="h-full" />
+           <div className="absolute inset-0 bg-purple-800/50" />
+         </div>
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>

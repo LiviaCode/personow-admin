@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
+import { Background } from "@/components/svg/background";
 import { LogoIcon } from "@/components/svg/logo";
 import { Button } from "@/components/ui/button"
 
@@ -10,7 +11,11 @@ export default function WelcomeScreen() {
 
 	return (
 	<div className="flex h-screen">
-		<div className="flex-1 bg-purple-800" />	
+					<div className="flex-1 relative overflow-hidden bg-purple-800">
+					<Background
+					className="h-full" />
+					<div className="absolute inset-0 bg-purple-800/50" />
+				  </div>	
 			<div className="flex items-center w-full max-w-md justify-center flex-col  bg-purple-900 p-10 text-white">
 				<div className="mb-6">
 					<div className=" flex items-center justify-center">

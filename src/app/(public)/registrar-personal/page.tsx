@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 
 import createPersonal from '@/app/http/create-personal'
 import { Label } from '@/components/label'
+import { Background } from '@/components/svg/background'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -46,10 +47,19 @@ export default function RegisterPersonal() {
 
   return (
     <div className="flex h-screen">
-      <div className="flex-1 bg-purple-800"></div>
+      <div className="flex-1 relative overflow-hidden bg-purple-800">
+      <Background
+      className="h-full" />
+      <div className="absolute inset-0 bg-purple-800/50" />
+    </div>
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">CADASTRO</h2>
+
+        <p className="mb-6 text-sm">
+          Faça seu cadastro e insira suas informações
+          abaixo.
+        </p>
 
         <p className="mb-6 text-sm">
           Etapa {step} de 2 — Preencha os dados abaixo.
@@ -135,7 +145,7 @@ export default function RegisterPersonal() {
                 />
               </div>
               <div>
-                <Label htmlFor="experiencia">Experiencia</Label>
+                <Label htmlFor="experiencia">Experiência</Label>
                 <Input
                   {...register('experiencia')}
                   placeholder="Digite sua formação"
@@ -165,7 +175,7 @@ export default function RegisterPersonal() {
                 <Button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="w-1/2 rounded bg-gray-600 p-3 font-semibold text-white hover:bg-gray-700"
+                  className="w-1/2 rounded bg-purple-900 border border-orange-800 p-3 font-semibold text-white hover:bg-gray-700"
                 >
                   Voltar
                 </Button>

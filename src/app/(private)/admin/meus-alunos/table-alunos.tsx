@@ -1,3 +1,8 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+
+import getAllAlunos, { Aluno } from '@/app/http/get-all-aluno'
 import TablePersonal from '@/components/tablePersonal'
 
 import { FiltroContainer } from '../../../../components/FiltroContainer'
@@ -8,40 +13,36 @@ const Column = [
   { key: 'celular', label: 'Celular' },
 ]
 
+const selectOptions = [{ label: 'todas', value: 'cidade' }]
+
 export function TableAlunos() {
+  const [dados, setDados] = useState<
+    { nome: string; email: string; celular: string }[]
+  >([])
+
+  useEffect(() => {
+    async function fetchAlunos() {
+      try {
+        const response = await getAllAlunos()
+  
+        const alunosFormatados = response.map((aluno: Aluno) => ({
+          nome: aluno.nome,
+          email: aluno.email,
+          celular: aluno.celular,
+        }))
+        
+        setDados(alunosFormatados)
+      } catch (error) {
+        console.error('Erro ao buscar alunos:', error)
+      }
+    }
+
+    fetchAlunos()
+  }, [])
+
   return (
     <FiltroContainer title="Meus Alunos" selectOptions={selectOptions}>
       <TablePersonal columns={Column} datas={dados} />
     </FiltroContainer>
   )
 }
-
-// APAGAR DEPOIS - APENAS PARA TESTE
-const selectOptions = [{ label: 'todas  ', value: 'cidade' }]
-const dados = [
-  {
-    nome: 'Stefanie',
-    email: 'aluno@gmail',
-    celular: '8999999999',
-  },
-  {
-    nome: 'Carlos',
-    email: 'aluno@gmail',
-    celular: '8999999999',
-  },
-  {
-    nome: 'Julia',
-    email: 'aluno@gmail',
-    celular: '8999999999',
-  },
-  {
-    nome: 'Julia',
-    email: 'aluno@gmail',
-    celular: '8999999999',
-  },
-  {
-    nome: 'Julia',
-    email: 'aluno@gmail',
-    celular: '8999999999',
-  },
-]

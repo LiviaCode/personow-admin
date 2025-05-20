@@ -31,13 +31,12 @@ export interface CreatePersonalResponse {
 
 export default async function createPersonal(data: CreatePersonalRequest) {
   try {
-    const response = await api
-      .post('personal/', {
-        json: {
-          data
-        },
-      })
-      .json<CreatePersonalResponse>()
+const response = await api
+    .post('personal/', {
+      json: data, 
+    })
+    .json<CreatePersonalResponse>()
+
 
     return response
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
