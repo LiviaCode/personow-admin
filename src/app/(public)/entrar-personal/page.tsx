@@ -49,13 +49,8 @@ export default function LoginPersonal() {
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
         <p className="mb-6 text-sm">
-          Faça login com sua conta google ou insira suas informações abaixo.
+          Faça login inserindo suas informações abaixo.
         </p>
-
-        <Button className="mb-6 flex w-full items-center justify-center rounded border border-orange-400 bg-purple-900 p-3 hover:bg-purple-900">
-          {/* botão para Google login, se quiser implementar depois */}
-        </Button>
-
         <hr className="mb-6 border-gray-400" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">

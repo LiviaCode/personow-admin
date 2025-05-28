@@ -5,7 +5,7 @@ export interface getAlunoResponse {
   nome: string;
   email: string;
   dateNascimento?: string;
-  genero?: string;
+  genero?: string
   celular?: string;
   altura?: string;
   peso?: string;

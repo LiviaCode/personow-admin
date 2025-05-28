@@ -24,7 +24,7 @@ type RegisterFormData = {
 }
 
 export default function RegisterPersonal() {
-  const [step, setStep] = useState(1) // controla o passo atual
+  const [step, setStep] = useState(1) 
   const router = useRouter()
 
   const {
@@ -57,7 +57,7 @@ export default function RegisterPersonal() {
         <h2 className="mb-2 text-2xl font-bold">CADASTRO</h2>
 
         <p className="mb-6 text-sm">
-          Faça seu cadastro e insira suas informações
+          Faça seu cadastro inserindo suas informações
           abaixo.
         </p>
 

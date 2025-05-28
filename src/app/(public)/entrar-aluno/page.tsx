@@ -30,7 +30,7 @@ export default function LoginAluno() {
       console.log('Login bem-sucedido:', response)
 
       localStorage.setItem('token', response.token)
-      window.location.href = '/admin'
+      window.location.href = '/alunos/home'
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       setErrorMessage('E-mail ou senha inválidos. Tente novamente.')
@@ -47,7 +47,7 @@ export default function LoginAluno() {
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
         <p className="mb-6 text-sm">
-          Faça login com sua conta e insira suas informações abaixo.
+          Faça login inserindo a suas informações abaixo.
         </p>
         <hr className="mb-6 border-gray-400" />
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
