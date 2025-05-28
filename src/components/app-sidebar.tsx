@@ -5,10 +5,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
-import {
-  ChevronDown,
-  type LucideIcon,
-} from "lucide-react";
+import { ChevronDown, type LucideIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -110,7 +107,7 @@ export function AppSidebar({ items }: AppSidebarProps) {
                     ) : (
                       <SidebarMenuButton
                         data-active={isActive}
-                        className="py-5 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-[#560C5C] data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#560C5C] data-[state=open]:hover:bg-[#560C5C] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
+                        className="py-5 hover:bg-[#560C5C] hover:text-zinc-50 active:hover:bg-[#560C5C] active:hover:text-zinc-50 data-[active=true]:bg-orange-800 data-[active=true]:text-zinc-50 data-[active=true]:hover:bg-[#560C5C] data-[state=open]:hover:bg-[#560C5C] data-[active=true]:hover:text-zinc-50 data-[state=open]:hover:text-zinc-50"
                       >
                         <Link href={item.url} className="flex items-center">
                           <item.icon className="mr-4 size-6" />

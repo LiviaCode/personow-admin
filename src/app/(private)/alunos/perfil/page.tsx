@@ -1,107 +1,286 @@
-import Image from "next/image";
+"use client";
 
-import { getAlunoResponse } from "@/app/http/get-aluno";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+import getAluno from "@/app/http/get-aluno";
+import updateAluno from "@/app/http/update-aluno";
+import { Label } from "@/components/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAlunoContext } from "@/context/AlunoContext";
+import createFoto from "@/app/http/create-foto";
 
-export default function PagePerfil(props: getAlunoResponse) {
-  const dadosPessoais = [
-    { id: "nome", label: "Nome Completo", type: "text", value: props.nome },
-    {
-      id: "dataNasc",
-      label: "Data de nascimento",
-      type: "text",
-      value: props.dateNascimento,
-    },
-    { id: "email", label: "Email", type: "email", value: props.email },
-    { id: "celular", label: "Celular", type: "text", value: props.celular },
-  ];
+type RegisterFormData = {
+  foto: FileList;
+  id: string;
+  nome: string;
+  email: string;
+  password: string;
+  dateNascimento: string;
+  genero: "Masculino" | "Feminino" | "Outro";
+  celular: string;
+  altura: string;
+  objetivo: string;
+  peso: string;
+  condicaoMedica: string;
+  historicoLesao: string;
+  nivelAtividade: "Sedentário" | "Moderado" | "Ativo";
+};
 
-  const dadosSaude = [
-    { id: "altura", label: "Altura", type: "number", value: props.altura },
-    { id: "peso", label: "Peso", type: "number", value: props.peso },
-    {
-      id: "condMedica",
-      label: "Condição médica",
-      type: "text",
-      value: props.condicaoMedica,
+export default function AtualizarAluno() {
+  const { state } = useAlunoContext();
+  const [formulario, setFormulario] = useState(false);
+  const [foto, setFoto] = useState("/perfil-sem-foto.png");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<RegisterFormData>({
+    defaultValues: {
+      id: "",
+      nome: "",
+      email: "",
+      password: "",
+      dateNascimento: "",
+      genero: "Outro",
+      celular: "",
+      altura: "",
+      objetivo: "",
+      peso: "",
+      condicaoMedica: "",
+      historicoLesao: "",
+      nivelAtividade: "Sedentário",
     },
-    {
-      id: "historico",
-      label: "Histórico de lesão",
-      type: "text",
-      value: props.historicoLesao,
-    },
-    {
-      id: "objetivo",
-      label: "Objetivos",
-      type: "text",
-      value: props.objetivo,
-    },
-  ];
+  });
+
+  useEffect(() => {
+    async function fetchAlunos() {
+      try {
+        const response = await getAluno(state.id);
+
+        // Converte a data para o formato yyyy-MM-dd
+        const dados = {
+          ...response,
+          dateNascimento: response.dateNascimento?.split("T")[0], // pega só a parte da data
+        };
+
+        if (dados.AlunoFotos && dados.AlunoFotos.length > 0) {
+          const urlFotos = `http://localhost:3018/images/${dados.AlunoFotos.at(-1)?.filename}`;
+          setFoto(urlFotos);
+        }
+        reset(dados);
+        setFormulario(true);
+        // localStorage.setItem("email", dados.email);
+      } catch (error) {
+        console.error("Erro ao buscar aluno:", error);
+      }
+    }
+
+    fetchAlunos();
+  }, [state.id, reset]);
+
+  async function onSubmit(data: RegisterFormData) {
+    try {
+      const alunoAtualizado = {
+        ...data,
+        id: state.id, // fallback caso algo falhe
+      };
+      await updateAluno(alunoAtualizado);
+
+      if (data.foto && data.foto.length > 0) {
+        const fotoRequests = {
+          aluno_id: state.id,
+          foto: data.foto,
+        };
+        await createFoto(fotoRequests);
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar:", error);
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center text-white">
-      <div className="text-center text-xs">
-        <Image
-          src="/imagens/professores/joao-silva.jpg"
-          alt="imagem"
-          width={120}
-          height={120}
-          className="-translate-y-10 rounded-full border-4 border-orange-500 object-cover"
-        />
-      </div>
-      <div className="space-y-5">
-        <form className="space-y-5flex flex-col" action="#">
-          <h1>Informações Pessoais</h1>
-          <div>
-            <input type="file" accept="image/*"></input>
-          </div>
-          {dadosPessoais.map((dado) => (
-            <div key={dado.id} className="flex flex-col">
-              <label htmlFor={dado.id} defaultValue={dado.value}>
-                {dado.label}
-              </label>
-              <Input id={dado.id} type={dado.type}></Input>
-            </div>
-          ))}
+    <>
+      <div className="flex w-full max-w-md flex-col p-10 text-white">
+        <h2 className="mb-2 text-2xl font-bold">Meu perfil </h2>
+        <p className="mb-6 text-sm">Mantenha suas informações atualizadas</p>
+        <hr className="mb-6 border-gray-400" />
+        {!formulario && <h1>Carregando os dados...</h1>}
+        {formulario && (
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative h-[150px] w-[150px] overflow-hidden rounded-full border-4 border-orange-500">
+                <Image
+                  src={foto}
+                  alt="Foto"
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="genero">Genero:</label>
-            <select name="genero" defaultValue={props.genero}>
-              <option value="masculino">Masculino</option>
-              <option value="feminino">Feminino</option>
-              <option value="outro">Outro</option>
-            </select>
-          </div>
-
-          <Button>Salvar</Button>
-        </form>
-        <form className="space-y-5" action="#">
-          <h1>Informações de Saúde e Condicionamento</h1>
-
-          {dadosSaude.map((campo) => (
-            <div key={campo.id} className="flex flex-col">
-              <label htmlFor={campo.id}>{campo.label}</label>
               <Input
-                id={campo.id}
-                type={campo.type}
-                defaultValue={campo.value}
+                {...register("foto")}
+                type="file"
+                accept="image/*"
+                className="mt-4 rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
               />
             </div>
-          ))}
 
-          <div>
-            <label htmlFor="nivel">Nivel atual de atividade física:</label>
-            <select name="nivel" defaultValue={props.nivelAtividade}>
-              <option value="sedentário">Sedentário</option>
-              <option value="moderado">Moderado</option>
-              <option value="ativo">Ativo</option>
-            </select>
-          </div>
+            <div>
+              <Label htmlFor="nome">Nome completo</Label>
+              <Input
+                {...register("nome")}
+                id="nome"
+                placeholder="Digite seu nome"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
 
-          <Button>Salvar</Button>
-        </form>
+            <div>
+              <Label htmlFor="email">E-mail</Label>
+              <Input
+                {...register("email")}
+                type="email"
+                id="email"
+                placeholder="Digite seu e-mail"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="password">Senha</Label>
+              <Input
+                {...register("password")}
+                type="password"
+                id="password"
+                placeholder="Digite sua senha"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="dateNascimento">Data de nascimento</Label>
+              <Input
+                {...register("dateNascimento")}
+                type="date"
+                id="dateNascimento"
+                placeholder="Digite sua data de nascimento"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="genero">Gênero</Label>
+              <select
+                {...register("genero")}
+                id="genero"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-gray-400"
+              >
+                <option value="">Selecione</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Outro">Outro</option>
+              </select>
+            </div>
+
+            <div>
+              <Label htmlFor="celular">Celular</Label>
+              <Input
+                {...register("celular")}
+                id="celular"
+                placeholder="Digite seu celular"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <hr className="my-6 border-gray-400" />
+
+            <div>
+              <Label htmlFor="altura">Altura</Label>
+              <Input
+                {...register("altura")}
+                id="altura"
+                placeholder="Digite sua altura"
+                step="0.01"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="objetivo">Objetivo</Label>
+              <Input
+                {...register("objetivo")}
+                id="objetivo"
+                placeholder="Digite seu objetivo"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="peso">Peso</Label>
+              <Input
+                {...register("peso")}
+                id="peso"
+                placeholder="Digite seu peso"
+                step="0.01"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="condicaoMedica">Condição Médica</Label>
+              <Input
+                {...register("condicaoMedica")}
+                id="condicaoMedica"
+                placeholder="Digite sua condição médica"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="historicoLesao">Histórico de Lesão</Label>
+              <Input
+                {...register("historicoLesao")}
+                id="historicoLesao"
+                placeholder="Digite seu histórico de lesão"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="nivelAtividade">Nível de Atividade</Label>
+              <select
+                {...register("nivelAtividade")}
+                id="nivelAtividade"
+                className="w-full rounded border border-orange-400 bg-transparent p-2 text-gray-400"
+              >
+                <option value="">Selecione</option>
+                <option value="Sedentário">Sedentário</option>
+                <option value="Moderado">Moderado</option>
+                <option value="Ativo">Ativo</option>
+              </select>
+            </div>
+
+            <div className="mt-4 flex gap-2">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full rounded bg-orange-400 p-3 font-semibold text-white hover:bg-orange-500"
+              >
+                {isSubmitting ? "Atualizando..." : "Atualizar"}
+              </Button>
+            </div>
+          </form>
+        )}
       </div>
-    </div>
+    </>
   );
 }

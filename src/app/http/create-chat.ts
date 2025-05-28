@@ -33,7 +33,7 @@ export default async function createChat({
           tipo_usuario2,
         },
       })
-      .json<CreateChatResponse>();
+      .json();
 
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
