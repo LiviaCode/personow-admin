@@ -1,8 +1,8 @@
 import { api } from "../api-client";
 
 export interface CreateMessageRequest {
-  conversa_id: string;
-  remetente_id: string;
+  conversa_id: number;
+  remetente_id: number;
   tipo_remetente: string;
   conteudo: string;
 }

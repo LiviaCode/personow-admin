@@ -3,6 +3,7 @@ import { api } from "../api-client";
 export interface getAllPersonalResponse {
   id: number;
   nome: string;
+  email: string;
   cidade: string;
   profissao: string;
   PersonalFotos: [{ url: string; filename: string }];
@@ -11,7 +12,7 @@ export interface getAllPersonalResponse {
 export default async function getAllPersonal() {
   try {
     const response = await api
-      .get("personal/?$select=id,nome,cidade,profissao&$expand=foto")
+      .get("personal/?$select=id,nome,email,cidade,profissao&$expand=foto")
       .json<getAllPersonalResponse[]>();
 
     return response;

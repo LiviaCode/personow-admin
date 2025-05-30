@@ -1,26 +1,40 @@
 "use client";
-import { ChevronLeft, ImageIcon } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-import createMessage, {
-  createMessageResponse,
-} from "@/app/http/create-message";
+import createMessage from "@/app/http/create-message";
 
 import { Mensagem } from "./mensagem";
 
-type ChatScreenProps = {
-  messages: createMessageResponse[];
-  tipo_usuario: "personal" | "aluno";
+export type mensagensChat = {
+  id_chat: number;
+  mensagens: {
+    id: number;
+    tipo_remetente: string;
+    conteudo: string;
+    created_at: string;
+  }[];
+  usuario: {
+    id: number;
+    nome: string;
+    usuarioFotos: [{ url: string; filename: string }];
+  };
+  remetende_id: number;
+  tipo_rementente: string;
   backUrl: string;
+  updated_at: string;
+  created_at: string;
 };
 
-export function ChatScreen({
-  messages,
-  tipo_usuario,
-  backUrl,
-}: ChatScreenProps) {
+type ChatScreenProps = {
+  chat: mensagensChat;
+};
+
+export function ChatScreen({ chat }: ChatScreenProps) {
   // Ordena o vetor pela data, da mais antiga para a mais recente
+  const messages = chat.mensagens;
   const sortedMessages = [...messages].sort(
     (a, b) =>
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
@@ -32,11 +46,10 @@ export function ChatScreen({
     e.preventDefault();
 
     if (messageInput.current === null) return;
-
     const NewMessage = {
-      conversa_id: "1",
-      remetente_id: "1",
-      tipo_remetente: tipo_usuario,
+      conversa_id: chat.id_chat,
+      remetente_id: chat.remetende_id,
+      tipo_remetente: chat.tipo_rementente,
       conteudo: messageInput.current.value,
     };
 
@@ -51,20 +64,39 @@ export function ChatScreen({
   }
   return (
     <div className="flex h-full flex-col justify-between rounded-t-[20px] bg-purple-900 text-white">
-      <div className="flex items-center rounded-[20px]">
-        <div className="row-span-2 flex w-20 items-center justify-center space-x-2 p-2">
-          <Link href={backUrl}>
+      <div className="flex flex-col items-center justify-center text-white">
+        <div className="text-center text-xs">
+          <div className="relative h-[70px] w-[70px] -translate-y-10 overflow-hidden rounded-full border-2 border-orange-500">
+            <Image
+              src={
+                Array.isArray(chat.usuario.usuarioFotos) &&
+                chat.usuario.usuarioFotos.length > 0
+                  ? `http://localhost:3018/images/${chat.usuario.usuarioFotos.at(-1)?.filename}`
+                  : "/perfil-sem-foto.png"
+              }
+              alt="Foto"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-3 items-center text-center md:text-2xl">
+          <Link href={chat.backUrl}>
             <ChevronLeft className="size-5 text-orange-500" />
           </Link>
-          <ImageIcon className="size-10 text-gray-300" />
+          <div>
+            <h1 className="font-bold">{chat.usuario.nome}</h1>
+          </div>
         </div>
-        <h2 className="w-60 font-bold">Teste</h2>
       </div>
 
-      <div className="flex-1 overflow-y-auto bg-purple-800 p-3">
+      <div className="flex-1 overflow-y-auto p-3">
         {mensagens.map((msg) => {
           const tipo =
-            msg.tipo_remetente === tipo_usuario ? "enviada" : "recebida";
+            msg.tipo_remetente === chat.tipo_rementente
+              ? "enviada"
+              : "recebida";
           return (
             <Mensagem
               key={msg.id}

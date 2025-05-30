@@ -1,4 +1,3 @@
-
 "use client";
 
 import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
@@ -10,6 +9,7 @@ import { AppSidebar, ItemsProps } from "@/components/app-sidebar";
 import { Header } from "@/components/header";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { PersonalContextProvider } from "@/context/PersonalContext";
 
 const items: ItemsProps[] = [
   {
@@ -46,7 +46,7 @@ export default function ProvidersAdmin({
   const pathname = usePathname();
 
   return (
-    <>
+    <PersonalContextProvider>
       <SidebarProvider>
         <AppSidebar items={items} />
 
@@ -61,14 +61,11 @@ export default function ProvidersAdmin({
             </div>
           </div>
 
-          <div className="overflow-y-auto md:pr-5">
-            <Suspense key={pathname}>
-        
-              {children}
-            </Suspense>
+          <div className="overflow-visible md:pr-5">
+            <Suspense key={pathname}>{children}</Suspense>
           </div>
         </div>
       </SidebarProvider>
-    </>
+    </PersonalContextProvider>
   );
 }

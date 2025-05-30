@@ -40,11 +40,12 @@ export default async function createChat({
   } catch (error: any) {
     if (error.response) {
       const status = error.response.status;
-      const body = await error.response.text();
+      const body = await error.response.json();
       console.error(`Erro ${status}:`, body);
+      throw body;
     } else {
       console.error("Erro inesperado:", error);
+      throw error;
     }
-    throw error;
   }
 }

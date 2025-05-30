@@ -4,13 +4,13 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import createFoto from "@/app/http/create-foto";
 import getAluno from "@/app/http/get-aluno";
 import updateAluno from "@/app/http/update-aluno";
 import { Label } from "@/components/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAlunoContext } from "@/context/AlunoContext";
-import createFoto from "@/app/http/create-foto";
 
 type RegisterFormData = {
   foto: FileList;

@@ -14,9 +14,9 @@ type ProfileDetailsProps = {
 };
 
 export function ProfileDetails({ personal }: ProfileDetailsProps) {
+  const router = useRouter();
   const [openAgenda, setOpenAgenda] = useState(false);
   const { state } = useAlunoContext();
-  const router = useRouter();
 
   async function onSubmit() {
     const NewChat = {
@@ -28,9 +28,21 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
     try {
       const response = await createChat(NewChat);
       console.log(response);
-      // router.push(`/alunos/mensagens/${response.id}`);
-    } catch (error) {
-      console.error("Erro ao cadastrar:", error);
+      router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errorMsg = error?.errors[0] || [];
+      console.log(errorMsg);
+
+      if (
+        errorMsg.includes(
+          "Já existe uma conversa iniciada entre este aluno e o Personal",
+        )
+      ) {
+        // Redirecionar direto para o chat já existente
+        router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
+        return;
+      }
     }
   }
 
@@ -66,25 +78,25 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-sm flex-1 px-4 py-6 text-white">
+      <div className="mx-auto max-w-[260px] flex-1 px-4 py-6 text-white md:max-w-md">
         <div className="flex-1 overflow-auto">
-          <h1>Sobre mim</h1>
+          <h1 className="text-sm">Sobre mim</h1>
           <span className="break-words">{personal.descricao}</span>
           <div className="mt-5 grid grid-cols-2 gap-4">
             <div>
-              <h2>Formação</h2>
+              <h2 className="text-sm">Formação</h2>
               <span>{personal.formacao}</span>
             </div>
             <div>
-              <h2>Experiencia</h2>
+              <h2 className="text-sm">Experiência</h2>
               <span>{personal.experiencia}</span>
             </div>
             <div>
-              <h2>Área de atuação</h2>
+              <h2 className="text-sm">Área de atuação</h2>
               <span>{personal.areaAtuacao}</span>
             </div>
             <div>
-              <h2>Modelo de atendimento</h2>
+              <h2 className="text-sm">Modelo de atendimento</h2>
               <span>{personal.modeloAtendimento}</span>
             </div>
           </div>

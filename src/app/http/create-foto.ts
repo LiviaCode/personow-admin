@@ -20,8 +20,8 @@ export default async function createFoto(data: CreateFotoRequest) {
       .json();
 
     return response;
-  } catch (error: any) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     if (error.response) {
       const status = error.response.status;
       const body = await error.response.text(); // ou .json() se for JSON

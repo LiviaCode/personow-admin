@@ -2,17 +2,37 @@ import { api } from "../api-client";
 
 export interface GetAllmessageResponse {
   id: number;
-  conversa_id: string;
-  remetente_id: number;
-  tipo_remetente: string;
-  conteudo: string;
+  mensagens: {
+    id: number;
+    tipo_remetente: string;
+    conteudo: string;
+    created_at: string;
+  }[];
+  personal_1: {
+    PersonalFotos: [{ url: string; filename: string }];
+    nome: string;
+    id: number;
+  };
+  aluno_1: {
+    AlunoFotos: [{ url: string; filename: string }];
+    nome: string;
+    id: number;
+  };
+  usuario1_id: number;
+  usuario2_id: number;
+  tipo_usuario1: string;
+  tipo_usuario2: string;
+  updated_at: string;
   created_at: string;
 }
 
-export default async function getAllmessage(usuario_id: string) {
+export default async function getAllmessage(
+  usuario_id: number,
+  personalId: number,
+) {
   try {
     const response = await api
-      .get(`chat/mensagens/${usuario_id}/`)
+      .get(`chat/conversa/${usuario_id}/${personalId}`)
       .json<GetAllmessageResponse[]>();
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
