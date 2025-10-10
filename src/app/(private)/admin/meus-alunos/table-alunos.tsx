@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-import getAllAlunos, { Aluno } from '@/app/http/get-all-aluno'
+import getAllAlunos, { Aluno } from '@/app/http/aluno/get-all-aluno'
 import TablePersonal from '@/components/tablePersonal'
 
 import { FiltroContainer } from '../../../../components/FiltroContainer'

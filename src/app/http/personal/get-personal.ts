@@ -1,19 +1,27 @@
-import { api } from "../api-client";
+import { api } from "../../api-client";
 
-export interface getAllPersonalResponse {
+export interface getPersonalResponse {
   id: number;
   nome: string;
-  email: string;
+  experiencia: string;
   cidade: string;
   profissao: string;
+  formacao: string;
+  areaAtuacao: string;
+  modeloAtendimento: string;
+  descricao: string;
   PersonalFotos: [{ url: string; filename: string }];
+  PersonalAgendas: [];
+  AulaAgendas: [];
 }
 
-export default async function getAllPersonal() {
+export default async function getPersonal(id: string) {
   try {
     const response = await api
-      .get("personal/?$select=id,nome,email,cidade,profissao&$expand=foto")
-      .json<getAllPersonalResponse[]>();
+      .get(
+        `personal/${id}?$select=id,nome,experiencia,cidade,profissao,formacao,areaAtuacao,modeloAtendimento,descricao&$expand=aulas,foto,agenda`,
+      )
+      .json<getPersonalResponse>();
 
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,42 +1,46 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { setCookie } from "cookies-next"
+import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
 
-import { profilePersonal } from "@/app/http/profile-personal";
-import { Label } from "@/components/label";
-import { Background } from "@/components/svg/background";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import { profilePersonal } from "@/app/http/personal/profile-personal"
+import { SignInForm, signInForm } from "@/app/schemas/sing-in-form"
+import { Label } from "@/components/label"
+import { Background } from "@/components/svg/background"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export default function LoginPersonal() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<LoginFormData>();
+    formState: { errors, isSubmitting },
+  } = useForm<SignInForm>({
+    resolver: zodResolver(signInForm),
+  })
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  async function onSubmit(data: LoginFormData) {
-    setErrorMessage(null);
-
+  async function onSubmit(data: SignInForm) {
     try {
-      const response = await profilePersonal(data);
-      console.log("Login bem-sucedido:", response);
+      // chama o http encapsulado
+      const response = await profilePersonal({
+        email: data.email,
+        password: data.password,
+      })
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("email", data.email);
-      document.cookie = `token=${response.token}; path=/; max-age=3600`;
-      window.location.href = "/admin";
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      setErrorMessage("E-mail ou senha inválidos. Tente novamente.");
+      // salva o token em cookie
+      setCookie("token", response.token, {
+        maxAge: 60 * 60 * 24, // 1 dia
+        path: "/",
+      })
+
+      // redireciona
+      router.push("/admin")
+    } catch (err) {
+      console.error("Erro no login:", err)
+      alert("Falha no login, verifique suas credenciais.")
     }
   }
 
@@ -49,9 +53,7 @@ export default function LoginPersonal() {
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
-        <p className="mb-6 text-sm">
-          Faça login inserindo suas informações abaixo.
-        </p>
+        <p className="mb-6 text-sm">Faça login inserindo suas informações abaixo.</p>
         <hr className="mb-6 border-gray-400" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -63,6 +65,7 @@ export default function LoginPersonal() {
               placeholder="Digite seu e-mail"
               className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
             />
+            {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
           </div>
 
           <div>
@@ -73,11 +76,8 @@ export default function LoginPersonal() {
               placeholder="Digite sua senha"
               className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
             />
+            {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
           </div>
-
-          {errorMessage && (
-            <p className="text-sm text-red-400">{errorMessage}</p>
-          )}
 
           <Button
             type="submit"
@@ -96,5 +96,5 @@ export default function LoginPersonal() {
         </p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,11 +1,11 @@
-import { api } from "../api-client"
+import { api } from "../../api-client"
 
 interface ProfilePersonalRequest {
   email: string
   password: string
 }
 
-interface ProfilePersonalResponse {
+export interface ProfilePersonalResponse {
   token: string
   personal: {
     id: string

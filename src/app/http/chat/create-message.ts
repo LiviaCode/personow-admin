@@ -1,4 +1,4 @@
-import { api } from "../api-client";
+import { api } from "../../api-client";
 
 export interface CreateMessageRequest {
   conversa_id: number;

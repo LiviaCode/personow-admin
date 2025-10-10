@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import createFoto from "@/app/http/create-foto";
-import getAluno from "@/app/http/get-aluno";
-import updateAluno from "@/app/http/update-aluno";
+import createFoto from "@/app/http/aluno/create-foto";
+import getAluno from "@/app/http/aluno/get-aluno";
+import updateAluno from "@/app/http/aluno/update-aluno";
 import { Label } from "@/components/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

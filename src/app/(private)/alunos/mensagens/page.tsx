@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 
 // import getChat from "@/app/http/get-all-chat";
-import getAllChat from "@/app/http/get-all-chat";
+import getAllChat from "@/app/http/chat/get-all-chat";
 import { ChatList, chatUsuario } from "@/components/chat/chatList";
 import { MobileFiltroContainer } from "@/components/FiltroContainer";
 import { useAlunoContext } from "@/context/AlunoContext";

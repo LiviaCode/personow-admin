@@ -8,14 +8,13 @@ import { X } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { createAgenda } from '@/app/http/agenda'
+import { createAgenda } from '@/app/http/agenda/create-agenda'
 import { Button } from '@/components/ui/button'
 
 
 dayjs.locale('pt-br')
 
-// Tipagem do evento
-type novoEvento = {
+type NovoEvento = {
   title: string
   start: string
   end: string
@@ -23,11 +22,10 @@ type novoEvento = {
 
 type PopupModalProps = {
   onClose: () => void
-  addEvent: (evento: novoEvento) => void
+  addEvent: (evento: NovoEvento) => void
   dateTime: string | null
 }
 
-// Schema de validação
 const formSchema = z.object({
   horaInicio: z.string().min(1, 'Obrigatório'),
   horaFim: z.string().min(1, 'Obrigatório'),
@@ -44,7 +42,6 @@ export default function PopupModal({ onClose, addEvent, dateTime }: PopupModalPr
     register,
     handleSubmit,
     watch,
- 
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -66,14 +63,24 @@ export default function PopupModal({ onClose, addEvent, dateTime }: PopupModalPr
     const start = formataData(form.diaTodo ? '00:00' : form.horaInicio)
     const end = formataData(form.diaTodo ? '23:59' : form.horaFim)
 
-    await createAgenda({
+    const personal_id = Number(localStorage.getItem('id'));
+
+    const payload = {
       title: 'Desabilitado',
       date_init: start.format('YYYY-MM-DD HH:mm:ss'),
       date_end: end.format('YYYY-MM-DD HH:mm:ss'),
-      personal_id: 4,
-    })
+      personal_id: personal_id,
+    }
 
-   
+    console.log('Payload enviado à API:', payload)
+
+    try {
+      await createAgenda(payload)
+      console.log('Restrição cadastrada com sucesso!')
+    } catch (error) {
+      console.error('Erro ao cadastrar restrição:', error)
+    }
+
     addEvent({
       title: 'Desabilitado',
       start: start.toISOString(),

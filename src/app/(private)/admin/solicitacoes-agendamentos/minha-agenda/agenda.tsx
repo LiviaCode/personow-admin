@@ -7,34 +7,32 @@ import React, { useState } from 'react'
 
 import PopupModal from './popup'
 
-type novoEvento = {
+type NovoEvento = {
   title: string
   start: string
   end: string
 }
 
 export default function Agenda() {
-  const [events, setEvents] = useState(evento)
+  const [events, setEvents] = useState<NovoEvento[]>([])
 
   const [popupModal, setPopupModal] = useState(false)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   const onDateClick = (info: { dateStr: string }) => {
+    console.log('Data clicada:', info.dateStr)
     setSelectedDate(info.dateStr)
     setPopupModal(true)
   }
 
-  const addEvento = (evento: novoEvento) => {
-    setEvents([evento])
+  const addEvento = (evento: NovoEvento) => {
+    console.log('Adicionando evento:', evento)
+    setEvents((prev) => [...prev, evento])
   }
-
-  // const onEventClick = (info) => {
-  //   console.log(info);
-  // };
 
   return (
     <div className="space-y-4 p-6">
-      <div className="justify- flex items-center text-2xl font-semibold text-text-web">
+      <div className="flex items-center text-2xl font-semibold text-text-web">
         Minha Agenda
       </div>
       <span>Selecione os horários que deseja desabilitar</span>
@@ -48,7 +46,6 @@ export default function Agenda() {
             slotMaxTime="20:00:00"
             allDaySlot={false}
             events={events}
-            // eventClick={onEventClick}
             dateClick={onDateClick}
             locale="pt-br"
             nowIndicator={true}
@@ -60,18 +57,15 @@ export default function Agenda() {
               left: 'dayGridMonth,timeGridWeek,timeGridDay',
             }}
           />
-          {popupModal && (
+          {popupModal && selectedDate && (
             <PopupModal
               onClose={() => setPopupModal(false)}
               addEvent={addEvento}
               dateTime={selectedDate}
-            ></PopupModal>
+            />
           )}
         </div>
       </div>
     </div>
   )
 }
-
-// TESTEEE - APAGAR DEPOIS - colocar dados retornado da API
-const evento = [{}]

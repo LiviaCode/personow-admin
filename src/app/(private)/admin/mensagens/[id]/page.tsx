@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import getAllmessage from "@/app/http/get-all-message";
+import getAllmessage from "@/app/http/chat/get-all-message";
 import { ChatScreen } from "@/components/chat/chatScreen";
 
 type PageChatProps = {

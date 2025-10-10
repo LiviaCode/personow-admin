@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { getAllPersonalResponse } from "@/app/http/get-all-personal";
+import { getAllPersonalResponse } from "@/app/http/personal/get-all-personal";
 
 type ListPersonalProps = {
   personals: getAllPersonalResponse[];

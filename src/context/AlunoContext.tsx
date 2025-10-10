@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import getAllAlunos from "@/app/http/get-all-aluno";
+import getAllAlunos from "@/app/http/aluno/get-all-aluno";
 
 type logonAluno = {
   id: string;

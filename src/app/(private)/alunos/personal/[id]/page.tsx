@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import getPersonal from "@/app/http/get-personal";
+import getPersonal from "@/app/http/personal/get-personal";
 import { ProfileDetails } from "@/components/personal/profileDetails";
 
 type ProfilePersonalProps = {

@@ -1,8 +1,10 @@
-"use client";
+'use client';
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { profileAluno } from "@/app/http/profile-aluno";
+import { profileAluno } from "@/app/http/aluno/profile-aluno";
 import { Label } from "@/components/label";
 import { Background } from "@/components/svg/background";
 import { Button } from "@/components/ui/button";
@@ -14,31 +16,39 @@ type LoginFormData = {
 };
 
 export default function LoginAluno() {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<LoginFormData>();
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   async function onSubmit(data: LoginFormData) {
     setErrorMessage(null);
 
     try {
-      const response = await profileAluno(data);
+      const response = await profileAluno({
+        email: data.email,
+        password: data.password,
+      })
       console.log("Login bem-sucedido:", response);
 
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("email", data.email);
-      document.cookie = `token=${response.token}; path=/; max-age=3600`;
-      window.location.href = "/alunos/home";
+      // Salva token no cookie
+      setCookie("token", response.token, {
+        maxAge: 60 * 60 * 24, // 1 dia
+        path: "/",
+      });
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+      // Redireciona para home do aluno
+      router.push("/alunos/home");
+    } catch (err) {
+      console.log(err)
       setErrorMessage("E-mail ou senha inválidos. Tente novamente.");
     }
   }
+
   return (
     <div className="flex h-screen">
       <div className="relative flex-1 overflow-hidden bg-purple-800">
@@ -48,10 +58,9 @@ export default function LoginAluno() {
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
-        <p className="mb-6 text-sm">
-          Faça login inserindo a suas informações abaixo.
-        </p>
+        <p className="mb-6 text-sm">Faça login inserindo as suas informações abaixo.</p>
         <hr className="mb-6 border-gray-400" />
+
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
             <Label htmlFor="email">E-mail</Label>
@@ -73,9 +82,7 @@ export default function LoginAluno() {
             />
           </div>
 
-          {errorMessage && (
-            <p className="text-sm text-red-400">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-sm text-red-400">{errorMessage}</p>}
 
           <Button
             type="submit"

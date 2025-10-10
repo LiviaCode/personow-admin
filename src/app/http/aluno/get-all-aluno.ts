@@ -1,4 +1,4 @@
-import { api } from "../api-client"
+import { api } from "../../api-client"
 
 export interface Aluno {
   map(arg0: (aluno: Aluno) => { nome: string; email: string; celular: string }): unknown

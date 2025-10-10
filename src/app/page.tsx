@@ -32,8 +32,11 @@ export default function WelcomeScreen() {
 					className="bg-orange-800 text-white font-semibold py-2 rounded-md hover:bg-orange-900 transition">
 						Sou Aluno
 					</Button>
-					<Button 
-					onClick={() => router.push("/entrar-personal")}
+					<Button
+					 
+					onClick={() => {
+						console.log("Navegando para a rota /entrar-personal");
+					router.push("/entrar-personal")}}
 					className="bg-purple-900 border border-orange-800 text-orange-800 font-semibold py-2 rounded-md hover:bg-orange-900 hover:text-white transition">
 						Sou Personal Treiner
 					</Button>

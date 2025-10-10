@@ -3,7 +3,7 @@ import { Suspense, useEffect, useState } from "react";
 
 import getAllPersonal, {
   getAllPersonalResponse,
-} from "@/app/http/get-all-personal";
+} from "@/app/http/personal/get-all-personal";
 import { MobileFiltroContainer } from "@/components/FiltroContainer";
 import { ListPersonal } from "@/components/personal/listPersonal";
 import { useAlunoContext } from "@/context/AlunoContext";

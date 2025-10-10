@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import getAllPersonals from "@/app/http/get-all-personal";
+import getAllPersonals from "@/app/http/personal/get-all-personal";
 
 type logonPersonal = {
   id: number;

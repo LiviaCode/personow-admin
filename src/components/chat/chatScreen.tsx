@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-import createMessage from "@/app/http/create-message";
+import createMessage from "@/app/http/chat/create-message";
 
 import { Mensagem } from "./mensagem";
 

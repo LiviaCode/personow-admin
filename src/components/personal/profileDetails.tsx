@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import PersonalAgenda from "@/app/(private)/alunos/personal/agenda";
-import createChat from "@/app/http/create-chat";
-import { getPersonalResponse } from "@/app/http/get-personal";
+import createChat from "@/app/http/chat/create-chat";
+import { getPersonalResponse } from "@/app/http/personal/get-personal";
 import { useAlunoContext } from "@/context/AlunoContext";
 
 type ProfileDetailsProps = {
