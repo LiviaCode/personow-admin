@@ -1,9 +1,14 @@
 import { type CookiesFn, getCookie } from "cookies-next";
 import ky from "ky";
 
+// Instância para personal
+export const apiPersonal = ky.create({
+  prefixUrl: "http://54.233.47.191/personal/",
+});
+
 export const api = ky.create({
-  prefixUrl: 'http://54.233.47.191/',
-  credentials: "include",
+  prefixUrl: "http://54.233.47.191/",
+  // credentials: "include",
 
   hooks: {
     beforeRequest: [
