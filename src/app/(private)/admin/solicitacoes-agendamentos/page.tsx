@@ -1,51 +1,89 @@
-import { FiltroContainer } from '../../../../components/FiltroContainer'
-import TablePersonal from '../../../../components/tablePersonal'
+"use client";
 
-const Column = [
-  { key: 'nome', label: 'Nome' },
-  { key: 'data', label: 'Data' },
-  { key: 'hora', label: 'Hora' },
-  { key: 'status', label: 'Status' },
-]
+import { useEffect, useState } from "react";
 
-const selectOptions = [
-  { label: 'Pendente', value: 'pendente' },
-  { label: 'Aprovado', value: 'aprovada' },
-  { label: 'Negado', value: 'negada' },
-]
+import { getAulaPersonal } from "@/app/http/agenda/get-aulas";
+import { updateAgenda } from "@/app/http/agenda/update-agenda";
+import { alertError, alertSuccess } from "@/components/alert";
+import { TablePersonal } from "@/components/tablePersonal";
 
-export default function MeusAlunos() {
-  return (
-    <FiltroContainer
-      title="Solicitações de Agendamento"
-      selectOptions={selectOptions}
-    >
-      <TablePersonal columns={Column} datas={dados} />
-    </FiltroContainer>
-  )
+const columns = [
+  { key: "id", label: "Id" },
+  { key: "nome", label: "Nome", searchable: true },
+  { key: "data", label: "Data", searchable: true },
+  { key: "hora", label: "Hora" },
+  { key: "status", label: "Status", searchable: true },
+];
+
+interface AulaTabela {
+  id: string;
+  nome: string;
+  status: string;
+  data: string;
+  hora: string;
 }
 
-// TESTE -- APAGAR DEPOIS
-const dados = [
-  {
-    nome: 'Stefanie',
-    data: '2025-04-16',
-    hora: '08:30',
-    status: true,
-    acao: 'Login',
-  },
-  {
-    nome: 'Carlos',
-    data: '2025-04-15',
-    hora: '09:45',
-    status: false,
-    acao: 'Logout',
-  },
-  {
-    nome: 'Julia',
-    data: '2025-04-14',
-    hora: '10:15',
-    status: true,
-    acao: 'Cadastro',
-  },
-]
+export default function Solicitacao() {
+  const [dados, setDados] = useState<AulaTabela[]>([]);
+
+  useEffect(() => {
+    async function getAlunos() {
+      const response = await getAulaPersonal({ id: "5" });
+      console.log(response);
+      const aulas =
+        response?.AulaAgendas?.map((dado) => {
+          const dataObj = new Date(dado.date_init);
+
+          return {
+            id: dado.id,
+            nome: dado.Aluno?.nome ?? "",
+            status: dado.status,
+            data: dataObj.toLocaleDateString("pt-BR"), // só a data
+            hora: dataObj.toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+        }) ?? [];
+
+      setDados(aulas);
+    }
+
+    getAlunos();
+  }, []);
+
+  async function responderSolicitacao(id: string, status: string) {
+    try {
+      await updateAgenda({ id, status });
+
+      // atualiza apenas o item alterado no estado
+      setDados((prev) =>
+        prev.map((aula) => (aula.id === id ? { ...aula, status } : aula)),
+      );
+      alertSuccess(`Solicitação ${status} com sucesso!`);
+    } catch (error) {
+      alertError(
+        `Falha ao tentar ${status} solicitação, tente novamente mais tarde.`,
+      );
+    }
+  }
+
+  return (
+    <TablePersonal
+      title="Solicitações de agendamento"
+      addLabel="Catálogo de exercícios"
+      columns={columns}
+      data={dados}
+      actions={[
+        {
+          label: "Aceitar",
+          onClick: (a) => responderSolicitacao(a.id, "aceita"), // ou "Em andamento"
+        },
+        {
+          label: "Recusar",
+          onClick: (a) => responderSolicitacao(a.id, "recusada"),
+        },
+      ]}
+    />
+  );
+}

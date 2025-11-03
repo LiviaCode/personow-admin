@@ -17,7 +17,7 @@ export interface getAlunoResponse {
   AlunoFotos?: [{ url: string; filename: string }];
 }
 
-export default async function getAluno(id: string) {
+export default async function getAluno(id: number) {
   try {
     const response = await api
       .get(

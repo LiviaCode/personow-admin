@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChartNoAxesCombined,
-  Dumbbell,
-  Mail,
-  Send,
-  UsersRound,
-} from "lucide-react";
+import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
@@ -22,11 +16,6 @@ const items: ItemsProps[] = [
     title: "Dashboard",
     url: "/admin",
     icon: ChartNoAxesCombined,
-  },
-  {
-    title: "Catálogo de exercicios",
-    url: "/admin/catalogo-exercicios",
-    icon: Dumbbell,
   },
   {
     title: "Meus Alunos",

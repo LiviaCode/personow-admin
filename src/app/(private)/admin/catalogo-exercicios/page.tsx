@@ -1,183 +1,207 @@
 "use client";
 
-import { Separator } from "@radix-ui/react-separator";
-import { MoreHorizontal } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  createExercicio,
+  createExercicioRequest,
+} from "@/app/http/exercicios/create-exercicio";
+import { deleteExercicio } from "@/app/http/exercicios/delete-exercicio";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  dadosExercicio,
+  getAllExercicio,
+} from "@/app/http/exercicios/get-all-exercicio";
+import { updateExercicio } from "@/app/http/exercicios/update-exercicio";
+import { alertError, alertSuccess } from "@/components/alert";
+import { CampoForm, DynamicForm } from "@/components/form";
+import { TablePersonal } from "@/components/tablePersonal";
+import Modal from "@/components/ui/modal";
 
-type RowData = {
-  id: number;
-  nome: string;
-  grupoMuscular: string;
-  descricao: string;
-  video: string;
-};
-
-type Column = {
-  key: keyof RowData;
-  label: string;
-};
-
-const columns: Column[] = [
+const columns = [
   { key: "id", label: "Id" },
-  { key: "nome", label: "Nome" },
-  { key: "grupoMuscular", label: "Grupo muscular" },
+  { key: "nome", label: "Nome", searchable: true },
+  { key: "grupo_muscular", label: "Grupo muscular" },
   { key: "descricao", label: "Descrição" },
 ];
 
-const datas: RowData[] = [
+const camposFormExercicio: CampoForm[] = [
   {
-    id: 1,
-    nome: "Supino Reto",
-    grupoMuscular: "Peito",
-    descricao:
-      "Deite-se no banco reto e empurre a barra para cima, trabalhando o peitoral, tríceps e ombros.",
-    video: "https://www.youtube.com/watch?v=rT7DgCr-3pg",
+    key: "nome",
+    label: "Nome do exercício:",
+    type: "text",
+    placeholder: "Rosca Direta",
   },
   {
-    id: 2,
-    nome: "Agachamento Livre",
-    grupoMuscular: "Pernas / Glúteos",
-    descricao:
-      "Com a barra sobre os ombros, flexione os joelhos essssssssssssssssssssssssssssssssssssssssssssssssssss desça o corpo mantendo as costas retas.",
-    video: "https://www.youtube.com/watch?v=Dy28eq2PjcM",
+    key: "descricao",
+    label: "Descrição do exercício:",
+    type: "textarea",
+    placeholder: "Em pé, segure a barra...",
+  },
+  {
+    key: "grupo_muscular",
+    label: "Grupo muscular:",
+    type: "text",
+    placeholder: "Superiores",
+  },
+  {
+    key: "video",
+    label: "Upload de vídeo:",
+    type: "file",
   },
 ];
 
 export default function Catalogo() {
-  const router = useRouter();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<
+    "Cadastrar" | "Editar" | "Video" | null
+  >(null);
+  const [dados, setDados] = useState<dadosExercicio[]>([]);
+  const [formExercicio, setFormExercicio] = useState<createExercicioRequest>({
+    nome: "",
+    grupo_muscular: "",
+    descricao: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [exercicioId, setExercicioId] = useState<number | null>(null);
+
+  // ======= Busca inicial =======
+  useEffect(() => {
+    getExercicios();
+  }, []);
+
+  async function getExercicios() {
+    try {
+      const response = await getAllExercicio();
+      setDados(response);
+    } catch (error) {
+      console.error("Erro ao buscar exercícios:", error);
+    }
+  }
+
+  // ======= Funções de formulário =======
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { id, value } = e.target;
+    setFormExercicio((prev) => ({ ...prev, [id]: value }));
+  };
+
+  // Função que envia o formulario (Criando o exercicio ou atualizando)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (Object.values(formExercicio).some((v) => !v)) {
+      alertError("Preencha todos os campos!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      if (modalType === "Editar" && exercicioId != null) {
+        await updateExercicio(exercicioId, formExercicio);
+        setDados((prev) =>
+          prev.map((item) =>
+            item.id === exercicioId ? { ...item, ...formExercicio } : item,
+          ),
+        );
+      } else {
+        const novo = await createExercicio(formExercicio);
+        setDados((prev) => [...prev, novo]);
+      }
+      alertSuccess("Seu catálogo de exercicios foi atualizado com sucesso");
+      setModalOpen(false);
+      closeModal();
+    } catch {
+      alertError(
+        "Falha ao atualizar o catálogo, tente novamente mais tarde...",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  async function excluirExercicio(id: number) {
+    try {
+      await deleteExercicio(id);
+      setDados((prev) => prev.filter((item) => item.id !== id));
+      alertSuccess("Exercicio deletado com sucesso");
+    } catch {
+      alertError("Falha ao deletar o exercicio, tente novamente mais tarde.");
+    }
+  }
+
+  // ======= Modal =======
+  const openModal = (
+    type: "Cadastrar" | "Editar" | "Video",
+    exercicio?: dadosExercicio,
+  ) => {
+    setModalType(type);
+    setModalOpen(true);
+
+    if (type === "Editar" && exercicio) {
+      setExercicioId(exercicio.id);
+      setFormExercicio({
+        nome: exercicio.nome,
+        grupo_muscular: exercicio.grupo_muscular,
+        descricao: exercicio.descricao,
+      });
+    }
+  };
+
+  const closeModal = () => {
+    setFormExercicio({
+      nome: "",
+      grupo_muscular: "",
+      descricao: "",
+    });
+    setModalType(null);
+    setModalOpen(false);
+    setExercicioId(null);
+  };
+
   return (
-    <div className="space-y-4 p-4 md:p-6">
-      <div className="flex flex-col items-start justify-between gap-2 text-2xl font-semibold text-text-web md:flex-row md:items-center md:gap-0">
-        <h1>Catálogo de exercícios</h1>
-        <Button
-          className="hover:text-purple-800"
-          onClick={() => router.push("catalogo-exercicios/cadastrar")}
-        >
-          Cadastrar exercício
-        </Button>
-      </div>
+    <>
+      <TablePersonal
+        title="Catálogo de Exercícios"
+        addLabel="Cadastrar exercício"
+        columns={columns}
+        data={dados}
+        onAdd={() => openModal("Cadastrar")}
+        actions={[
+          {
+            label: "Ver vídeo",
+            onClick: (x) => openModal("Video", x),
+          },
+          {
+            label: "Editar",
+            onClick: (x) => openModal("Editar", x),
+          },
+          { label: "Excluir", onClick: (x) => excluirExercicio(x.id) },
+        ]}
+      />
 
-      <Separator />
-
-      {/* Tabela para desktop */}
-      <div className="hidden overflow-x-auto md:block">
-        <Table
-          className="w-full border-collapse overflow-hidden rounded-lg bg-purple-800 shadow-xl"
-          style={{ tableLayout: "fixed" }}
-        >
-          <TableHeader>
-            <TableRow className="h-12">
-              {columns.map((col) => (
-                <TableHead
-                  key={col.key}
-                  className="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-2 text-center text-sm font-medium text-white md:text-base"
-                >
-                  {col.label}
-                </TableHead>
-              ))}
-              <TableHead className="px-4 py-2 text-center font-medium text-white">
-                Ações
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {datas.map((row, index) => (
-              <TableRow className="h-12" key={index}>
-                {columns.map((col) => (
-                  <TableCell
-                    key={col.key}
-                    className="overflow-hidden text-ellipsis whitespace-nowrap px-4 py-2 text-center text-sm font-light text-gray-300 md:text-base"
-                  >
-                    {row[col.key]}
-                  </TableCell>
-                ))}
-                <TableCell className="px-4 py-2">
-                  <div className="flex justify-center">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button className="h-8 w-8 p-0 text-white">
-                          <span className="sr-only">Abrir ações</span>
-                          <MoreHorizontal />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="flex w-36 flex-col items-center justify-center bg-background-web md:w-40">
-                        <Button className="w-full hover:text-purple-800">
-                          Ver vídeo
-                        </Button>
-                        <Button
-                          className="w-full hover:text-purple-800"
-                          onClick={() =>
-                            router.push("catalogo-exercicios/atualizar")
-                          }
-                        >
-                          Editar exercício
-                        </Button>
-                        <Button className="w-full hover:text-purple-800">
-                          Excluir exercício
-                        </Button>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Cards para mobile */}
-      <div className="flex flex-col gap-4 md:hidden">
-        {datas.map((row, index) => (
-          <div
-            key={index}
-            className="flex flex-col gap-2 rounded-lg bg-purple-800 p-4 text-white shadow-xl"
-          >
-            {columns.map((col) => (
-              <div
-                key={col.key}
-                className="flex justify-between text-sm md:text-base"
-              >
-                <span className="font-medium">{col.label}:</span>
-                <span className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
-                  {row[col.key]}
-                </span>
-              </div>
-            ))}
-            <div className="mt-2 flex flex-col gap-2">
-              <Button
-                className="w-full hover:text-purple-800"
-                onClick={() => window.open(row.video, "_blank")}
-              >
-                Ver vídeo
-              </Button>
-              <Button
-                className="w-full hover:text-purple-800"
-                onClick={() => router.push("catalogo-exercicios/atualizar")}
-              >
-                Editar exercício
-              </Button>
-              <Button className="w-full hover:text-purple-800">
-                Excluir exercício
-              </Button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+      {/* ======= Modal Dinâmico ======= */}
+      <Modal
+        isOpen={modalOpen}
+        onClose={closeModal}
+        title={
+          modalType === "Cadastrar" ? "Cadastrar Exercício" : "Editar Exercício"
+        }
+      >
+        <DynamicForm
+          campos={camposFormExercicio}
+          valores={{ ...formExercicio }}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          loading={loading}
+          submitLabel={
+            modalType === "Cadastrar"
+              ? "Cadastrar exercício"
+              : "Salvar alterações"
+          }
+        />
+      </Modal>
+    </>
   );
 }
