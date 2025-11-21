@@ -1,17 +1,13 @@
-import { api } from "../../api-client"
+import { api } from "../../api-client";
 
 interface ProfilePersonalRequest {
-  email: string
-  password: string
+  email: string;
+  password: string;
 }
 
 export interface ProfilePersonalResponse {
-  token: string
-  personal: {
-    id: string
-    nome: string
-    email: string
-  }
+  token: string;
+  id: number;
 }
 
 export async function profilePersonal({
@@ -20,22 +16,22 @@ export async function profilePersonal({
 }: ProfilePersonalRequest): Promise<ProfilePersonalResponse> {
   try {
     const response = await api
-      .post('personal/token/', {
+      .post("personal/token/", {
         json: { email, password },
       })
-      .json<ProfilePersonalResponse>()
+      .json<ProfilePersonalResponse>();
 
-    return response
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return response;
+
   } catch (error: any) {
     if (error.response) {
-      const status = error.response.status
-      const body = await error.response.text()
-      console.error(`Erro ${status}:`, body)
+      const status = error.response.status;
+      const body = await error.response.text();
+      console.error(`Erro ${status}:`, body);
     } else {
-      console.error('Erro inesperado:', error)
+      console.error("Erro inesperado:", error);
     }
 
-    throw error
+    throw error;
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { BicepsFlexed, Mail, Send, User } from "lucide-react";
+import { BicepsFlexed, Dumbbell, Mail, Send, User } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
@@ -18,6 +18,11 @@ const items: ItemsProps[] = [
     title: "Perfil",
     url: "/alunos/perfil",
     icon: User,
+  },
+    {
+    title: "Minhas Aulas",
+    url: "/alunos/minhas-aulas",
+    icon: Dumbbell,
   },
   {
     title: "Mensagens",

@@ -1,4 +1,5 @@
 "use client";
+
 import { Calendar, ChevronLeft, MessageCircleMore } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,23 +26,20 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
       usuario2_id: personal.id,
       tipo_usuario2: "personal",
     };
+
     try {
       const response = await createChat(NewChat);
       console.log(response);
       router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorMsg = error?.errors[0] || [];
-      console.log(errorMsg);
 
       if (
         errorMsg.includes(
-          "Já existe uma conversa iniciada entre este aluno e o Personal",
+          "Já existe uma conversa iniciada entre este aluno e o Personal"
         )
       ) {
-        // Redirecionar direto para o chat já existente
         router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
-        return;
       }
     }
   }
@@ -78,23 +76,28 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           </div>
         </div>
       </div>
+
       <div className="mx-auto max-w-[260px] flex-1 px-4 py-6 text-white md:max-w-md">
         <div className="flex-1 overflow-auto">
           <h1 className="text-sm">Sobre mim</h1>
           <span className="break-words">{personal.descricao}</span>
+
           <div className="mt-5 grid grid-cols-2 gap-4">
             <div>
               <h2 className="text-sm">Formação</h2>
               <span>{personal.formacao}</span>
             </div>
+
             <div>
               <h2 className="text-sm">Experiência</h2>
               <span>{personal.experiencia}</span>
             </div>
+
             <div>
               <h2 className="text-sm">Área de atuação</h2>
               <span>{personal.areaAtuacao}</span>
             </div>
+
             <div>
               <h2 className="text-sm">Modelo de atendimento</h2>
               <span>{personal.modeloAtendimento}</span>
@@ -102,7 +105,10 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           </div>
         </div>
       </div>
+
+      {/* BOTÕES */}
       <div className="mx-auto flex w-full flex-col gap-4 md:w-1/3">
+
         <button
           onClick={onSubmit}
           className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-orange-500 p-2 text-orange-500 transition hover:bg-orange-500 hover:text-white"
@@ -111,6 +117,7 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
           Enviar mensagem
         </button>
 
+        {/* ABRIR AGENDA COM PERSONAL ID */}
         <button
           onClick={() => setOpenAgenda(true)}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-500 p-2 text-white transition hover:bg-orange-600"
@@ -121,7 +128,10 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
       </div>
 
       {openAgenda && (
-        <PersonalAgenda setAgenda={setOpenAgenda}></PersonalAgenda>
+        <PersonalAgenda
+          setAgenda={setOpenAgenda}
+          personalId={personal.id}   // <── PASSANDO O ID DO PERSONAL
+        />
       )}
     </div>
   );

@@ -6,8 +6,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { profileAluno } from "@/app/http/aluno/profile-aluno";
-import { profilePersonal } from "@/app/http/personal/profile-personal";
+// import { profileAluno } from "@/app/http/aluno/profile-aluno";
+// import { profilePersonal } from "@/app/http/personal/profile-personal";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +28,7 @@ export function Header() {
   const pathname = usePathname();
   const isAdminPage = pathname === "/admin";
 
-  const [nome, setNome] = useState<string>("");
+  const [nome] = useState<string>("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

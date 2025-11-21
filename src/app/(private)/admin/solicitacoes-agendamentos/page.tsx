@@ -1,5 +1,6 @@
 "use client";
 
+import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 
 import { getAulaPersonal } from "@/app/http/agenda/get-aulas";
@@ -26,40 +27,56 @@ interface AulaTabela {
 export default function Solicitacao() {
   const [dados, setDados] = useState<AulaTabela[]>([]);
 
-  useEffect(() => {
-    async function getAlunos() {
-      const response = await getAulaPersonal({ id: "5" });
-      console.log(response);
-      const aulas =
-        response?.AulaAgendas?.map((dado) => {
-          const dataObj = new Date(dado.date_init);
+useEffect(() => {
+  async function getAlunos() {
+    let personal_id = getCookie("personal_id");
 
-          return {
-            id: dado.id,
-            nome: dado.Aluno?.nome ?? "",
-            status: dado.status,
-            data: dataObj.toLocaleDateString("pt-BR"), // só a data
-            hora: dataObj.toLocaleTimeString("pt-BR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          };
-        }) ?? [];
+    console.log("🔎 Cookie personal_id bruto:", personal_id);
 
-      setDados(aulas);
+    if (!personal_id) {
+      console.error("personal_id não encontrado");
+      return;
     }
 
-    getAlunos();
-  }, []);
+    personal_id = String(personal_id);
+
+    console.log(" personal_id apos String():", personal_id);
+
+    const response = await getAulaPersonal({ id: personal_id });
+
+    console.log("Resposta getAulaPersonal:", response);
+
+    const aulas =
+      response?.AulaAgendas?.map((dado) => {
+        const dataObj = new Date(dado.date_init);
+
+        return {
+          id: dado.id,
+          nome: dado.Aluno?.nome ?? "",
+          status: dado.status,
+          data: dataObj.toLocaleDateString("pt-BR"),
+          hora: dataObj.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+      }) ?? [];
+
+    setDados(aulas);
+  }
+
+  getAlunos();
+}, []);
+
 
   async function responderSolicitacao(id: string, status: string) {
     try {
       await updateAgenda({ id, status });
 
-      // atualiza apenas o item alterado no estado
       setDados((prev) =>
         prev.map((aula) => (aula.id === id ? { ...aula, status } : aula)),
       );
+
       alertSuccess(`Solicitação ${status} com sucesso!`);
     } catch (error) {
       alertError(
@@ -77,7 +94,7 @@ export default function Solicitacao() {
       actions={[
         {
           label: "Aceitar",
-          onClick: (a) => responderSolicitacao(a.id, "aceita"), // ou "Em andamento"
+          onClick: (a) => responderSolicitacao(a.id, "aceita"),
         },
         {
           label: "Recusar",

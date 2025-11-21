@@ -57,22 +57,37 @@ export function FiltroContainer({
 export function MobileFiltroContainer({
   title,
   children,
-}: FiltroContainerProps) {
+  onFilterChange, 
+  onFilterClick, 
+  filterValue,   
+}: FiltroContainerProps & {
+  onFilterChange?: (value: string) => void;
+  onFilterClick?: () => void;
+  filterValue?: string;
+}) {
   return (
     <div className="h-full space-y-4 rounded-t-[15px] bg-purple-900 p-3 text-gray-200">
       <h1 className="text-lg font-semibold">{title}</h1>
+
       <div className="flex items-center justify-start space-x-2">
         <input
           name="filter"
           type="text"
-          placeholder="Pesquisar"
+          placeholder="Filtrar "
           className="h-8 w-full max-w-xs rounded-[8px] border border-secondary-web p-2 focus:outline-none"
-        ></input>
-        <button className="h-8 rounded-[8px] bg-orange-500 p-2 focus:outline-none">
+          value={filterValue}
+          onChange={(e) => onFilterChange?.(e.target.value)} 
+        />
+        <button
+          className="h-8 rounded-[8px] bg-orange-500 p-2 focus:outline-none"
+          onClick={onFilterClick} 
+        >
           <SlidersHorizontal size={15} />
         </button>
       </div>
+
       {children}
     </div>
   );
 }
+

@@ -22,27 +22,38 @@ export default function LoginPersonal() {
     resolver: zodResolver(signInForm),
   })
 
-  async function onSubmit(data: SignInForm) {
-    try {
-      // chama o http encapsulado
-      const response = await profilePersonal({
-        email: data.email,
-        password: data.password,
-      })
+ async function onSubmit(data: SignInForm) {
+  try {
+    const response = await profilePersonal({
+      email: data.email,
+      password: data.password,
+    });
 
-      // salva o token em cookie
-      setCookie("token", response.token, {
-        maxAge: 60 * 60 * 24, // 1 dia
-        path: "/",
-      })
+    console.log("LOGIN PERSONAL RESPONSE:", response);
 
-      // redireciona
-      router.push("/admin")
-    } catch (err) {
-      console.error("Erro no login:", err)
-      alert("Falha no login, verifique suas credenciais.")
-    }
+    // Salva token
+    setCookie("token", response.token, {
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+
+    // Salva ID correto
+    setCookie("personal_id", response.id, {
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+
+    console.log(" personal_id salvo:", response.id);
+
+    router.push("/admin");
+
+  } catch (err) {
+    console.error("Erro no login:", err);
+    alert("Falha no login, verifique suas credenciais.");
   }
+}
+
+
 
   return (
     <div className="flex h-screen">

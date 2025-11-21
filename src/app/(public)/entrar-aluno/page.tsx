@@ -32,19 +32,29 @@ export default function LoginAluno() {
       const response = await profileAluno({
         email: data.email,
         password: data.password,
-      })
+      });
+
       console.log("Login bem-sucedido:", response);
 
-      // Salva token no cookie
+      // Token
       setCookie("token", response.token, {
-        maxAge: 60 * 60 * 24, // 1 dia
+        maxAge: 60 * 60 * 24,
         path: "/",
       });
 
-      // Redireciona para home do aluno
+      // ID DO ALUNO (vem direto como response.id)
+      setCookie("aluno_id", response.id, {
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
+
+      console.log("🔥 Cookie aluno_id salvo:", response.id);
+      console.log("🔥 document.cookie:", document.cookie);
+
       router.push("/alunos/home");
+
     } catch (err) {
-      console.log(err)
+      console.log("ERRO LOGIN:", err);
       setErrorMessage("E-mail ou senha inválidos. Tente novamente.");
     }
   }
@@ -63,31 +73,33 @@ export default function LoginAluno() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div>
-            <Label htmlFor="email">E-mail</Label>
+            <Label>E-mail</Label>
             <Input
               {...register("email")}
               type="email"
               placeholder="Digite seu e-mail"
-              className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              className="w-full rounded border border-orange-400 bg-transparent p-2 text-white"
             />
           </div>
 
           <div>
-            <Label htmlFor="password">Senha</Label>
+            <Label>Senha</Label>
             <Input
               {...register("password")}
               type="password"
               placeholder="Digite sua senha"
-              className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
+              className="w-full rounded border border-orange-400 bg-transparent p-2 text-white"
             />
           </div>
 
-          {errorMessage && <p className="text-sm text-red-400">{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-sm text-red-400">{errorMessage}</p>
+          )}
 
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="mt-4 w-full rounded bg-orange-400 p-3 font-semibold text-white transition-colors hover:bg-orange-500"
+            className="mt-4 w-full rounded bg-orange-400 p-3 font-semibold text-white"
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
           </Button>

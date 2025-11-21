@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import { api } from "@/app/api-client";
 
 import { dadosExercicio } from "../exercicios/get-all-exercicio";
@@ -7,6 +9,7 @@ export interface getAllPlanoResponse {
 }
 
 export interface dadosPlano {
+  personal_nome: ReactNode;
   id: number;
   personal_id: string;
   aluno_id: string;

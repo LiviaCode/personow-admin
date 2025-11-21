@@ -113,7 +113,7 @@ export default function RegisterAluno() {
               </div>
               <div>
                 <Label htmlFor="genero">Gênero</Label>
-                <select {...register('genero')} className="w-full rounded border border-orange-400 bg-transparent p-2 text-purple-900 placeholder:text-gray-400">
+                <select {...register('genero')} className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400">
                   <option value="">Selecione</option>
                   <option value="Feminino">Feminino</option>
                   <option value="Masculino">Masculino</option>
@@ -148,15 +148,20 @@ export default function RegisterAluno() {
               </div>
               <div>
                 <Label htmlFor="condicaoMedica">Condição Médica</Label>
-                <Input {...register('condicaoMedica')} placeholder="Ex: São Paulo" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
+                <Input {...register('condicaoMedica')} placeholder="descreva" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
               <div>
                 <Label htmlFor="historicoLesao">Historico de Lesão</Label>
-                <Input {...register('historicoLesao')} placeholder="Ex: São Paulo" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
+                <Input {...register('historicoLesao')} placeholder="descreva" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
               <div>
                 <Label htmlFor="nivelAtividade">Nivel de Atividade</Label>
-                <Input {...register('nivelAtividade')} placeholder="Ex: Sedentário, Moderado ou Ativo" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
+                 <select {...register('nivelAtividade')} className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400">
+                  <option value="">Selecione</option>
+                  <option value="Sedentário">Sedentário</option>
+                  <option value="Moderado">Moderado</option>
+                  <option value="Ativo">Ativo</option>
+                </select>
               </div>
 
               <div className="flex gap-2 mt-4">

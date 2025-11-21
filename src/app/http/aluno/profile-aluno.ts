@@ -6,6 +6,7 @@ interface ProfileAlunoRequest {
 }
 
 interface ProfileAlunoResponse {
+  id(arg0: string, id: any, arg2: { maxAge: number; path: string; }): unknown;
   token: string;
   aluno: {
     id: string;
