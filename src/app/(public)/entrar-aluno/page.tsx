@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -42,17 +42,10 @@ export default function LoginAluno() {
         path: "/",
       });
 
-      // ID DO ALUNO (vem direto como response.id)
-      setCookie("aluno_id", response.id, {
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
+      localStorage.setItem("id", response.id);
 
-      console.log("🔥 Cookie aluno_id salvo:", response.id);
-      console.log("🔥 document.cookie:", document.cookie);
-
+      // Redireciona para home do aluno
       router.push("/alunos/home");
-
     } catch (err) {
       console.log("ERRO LOGIN:", err);
       setErrorMessage("E-mail ou senha inválidos. Tente novamente.");
@@ -68,7 +61,9 @@ export default function LoginAluno() {
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
-        <p className="mb-6 text-sm">Faça login inserindo as suas informações abaixo.</p>
+        <p className="mb-6 text-sm">
+          Faça login inserindo as suas informações abaixo.
+        </p>
         <hr className="mb-6 border-gray-400" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">

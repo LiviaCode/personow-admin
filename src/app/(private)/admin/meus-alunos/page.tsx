@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import getAllAlunos, { Aluno } from "@/app/http/aluno/get-all-aluno";
+import { getAulaPersonal } from "@/app/http/agenda/get-aulas";
 import getAluno, { getAlunoResponse } from "@/app/http/aluno/get-aluno";
 import { TablePersonal } from "@/components/tablePersonal";
 import Modal from "@/components/ui/modal";
@@ -16,7 +16,7 @@ const Column = [
 
 export default function MeusAlunos() {
   const [dados, setDados] = useState<
-    { id: string; nome: string; email: string; celular: string }[]
+    { id: string; nome: string; email: string }[]
   >([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [alunoDetalhe, setAlunoDetalhe] = useState<getAlunoResponse | null>(
@@ -25,24 +25,31 @@ export default function MeusAlunos() {
   const [loadingDetalhe, setLoadingDetalhe] = useState(false);
 
   useEffect(() => {
-    async function fetchAlunos() {
-      try {
-        const response = await getAllAlunos();
+    async function getAlunos() {
+      const idPersonal = localStorage.getItem("id");
+      if (idPersonal !== null) {
+        const response = await getAulaPersonal(idPersonal);
 
-        const alunosFormatados = response.map((aluno: Aluno) => ({
-          id: aluno.id,
-          nome: aluno.nome,
-          email: aluno.email,
-          celular: aluno.celular,
-        }));
+        // Filtra apenas as aulas aceitas e mapeia os alunos
+        const aulasAceitas =
+          response?.AulaAgendas?.filter((dado) => dado.status === "aceita").map(
+            (dado) => ({
+              id: dado.aluno_id,
+              nome: dado.Aluno?.nome ?? "",
+              email: dado.Aluno?.email ?? "",
+            }),
+          ) ?? [];
 
-        setDados(alunosFormatados);
-      } catch (error) {
-        console.error("Erro ao buscar alunos:", error);
+        // Remove duplicados com base no id do aluno
+        const alunosUnicos = Array.from(
+          new Map(aulasAceitas.map((aluno) => [aluno.id, aluno])).values(),
+        );
+
+        setDados(alunosUnicos);
       }
     }
 
-    fetchAlunos();
+    getAlunos();
   }, []);
 
   const abrirModal = async (id: string) => {

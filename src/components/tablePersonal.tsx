@@ -78,7 +78,10 @@ export function TablePersonal<T>({
         <div className="flex flex-col items-start justify-between gap-2 text-2xl font-semibold text-text-web md:flex-row md:items-center md:gap-0">
           {title && <h1>{title}</h1>}
           {onAdd && (
-            <Button className="hover:text-purple-800" onClick={onAdd}>
+            <Button
+              className="hover:text-whiter bg-orange-800 hover:bg-purple-900"
+              onClick={onAdd}
+            >
               {addLabel}
             </Button>
           )}
@@ -161,7 +164,7 @@ export function TablePersonal<T>({
                               .map((action, i) => (
                                 <Button
                                   key={i}
-                                  className="mb-1 w-full bg-orange-800 hover:bg-purple-800"
+                                  className="mb-1 w-full bg-orange-800 hover:bg-purple-900"
                                   onClick={() => action.onClick(row)}
                                 >
                                   {action.label}

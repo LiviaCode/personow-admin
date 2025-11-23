@@ -56,6 +56,8 @@ export default function RegisterAluno() {
         path: "/",
       })
 
+      localStorage.setItem("id", loginResponse.id);
+
       // 4️⃣ Redireciona para /alunos/home
       router.push("/alunos/home")
     } catch (error) {

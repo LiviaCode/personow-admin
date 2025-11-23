@@ -1,9 +1,6 @@
 import { api } from "../../api-client";
 
 export interface Aluno {
-  map(
-    arg0: (aluno: Aluno) => { nome: string; email: string; celular: string },
-  ): unknown;
   id: string;
   nome: string;
   email: string;
@@ -17,6 +14,16 @@ export interface Aluno {
   condicaoMedica: string;
   historicoLesao: string;
   nivelAtividade: "Sedentário" | "Moderado" | "Ativo";
+  AlunoFotos: [{ url: string; filename: string }];
+  AulaAgendas: [AulaAgendas];
+}
+
+interface AulaAgendas {
+  id: string;
+  personal_id: string;
+  endereco: string;
+  date_init: string;
+  date_end: string;
 }
 
 export interface GetAllAlunosResponse {

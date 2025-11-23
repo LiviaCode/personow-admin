@@ -22,7 +22,7 @@ export async function profilePersonal({
       .json<ProfilePersonalResponse>();
 
     return response;
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response) {
       const status = error.response.status;

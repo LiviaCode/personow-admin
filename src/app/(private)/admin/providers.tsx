@@ -1,6 +1,12 @@
 "use client";
 
-import { ChartNoAxesCombined, Mail, Send, UsersRound } from "lucide-react";
+import {
+  CalendarDays,
+  House,
+  LucideBadgeDollarSign,
+  MessageCircle,
+  UsersIcon,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
 
@@ -13,30 +19,35 @@ import { PersonalContextProvider } from "@/context/PersonalContext";
 
 const items: ItemsProps[] = [
   {
-    title: "Dashboard",
+    title: "Home",
     url: "/admin",
-    icon: ChartNoAxesCombined,
+    icon: House,
   },
   {
     title: "Meus Alunos",
     url: "/admin/meus-alunos",
-    icon: UsersRound,
+    icon: UsersIcon,
   },
   {
     title: "Mensagens",
     url: "/admin/mensagens",
-    icon: Mail,
+    icon: MessageCircle,
   },
   {
     title: "Solicitações de Agendamentos",
     url: "/admin/solicitacoes-agendamentos",
-    icon: Send,
+    icon: CalendarDays,
     subItems: [
       {
         title: "Minha Agenda",
         url: "/admin/solicitacoes-agendamentos/minha-agenda",
       },
     ],
+  },
+  {
+    title: "Planos",
+    url: "/admin/planos",
+    icon: LucideBadgeDollarSign,
   },
 ];
 

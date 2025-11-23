@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import {
-  createExercicio,
-  createExercicioRequest,
-} from "@/app/http/exercicios/create-exercicio";
+import { createExercicio } from "@/app/http/exercicios/create-exercicio";
+import createVideoExercicio from "@/app/http/exercicios/create-video";
 import { deleteExercicio } from "@/app/http/exercicios/delete-exercicio";
 import {
   dadosExercicio,
@@ -50,6 +48,13 @@ const camposFormExercicio: CampoForm[] = [
   },
 ];
 
+type createExercicioRequest = {
+  nome: string;
+  grupo_muscular: string;
+  descricao: string;
+  video: FileList;
+};
+
 export default function Catalogo() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState<
@@ -60,9 +65,11 @@ export default function Catalogo() {
     nome: "",
     grupo_muscular: "",
     descricao: "",
+    video: {} as FileList,
   });
   const [loading, setLoading] = useState(false);
-  const [exercicioId, setExercicioId] = useState<number | null>(null);
+  const [exercicioSelecionado, setExercicioSelecionado] =
+    useState<dadosExercicio | null>(null);
 
   // ======= Busca inicial =======
   useEffect(() => {
@@ -84,11 +91,15 @@ export default function Catalogo() {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ) => {
-    const { id, value } = e.target;
-    setFormExercicio((prev) => ({ ...prev, [id]: value }));
+    const { id, value, files, type } = e.target as HTMLInputElement;
+
+    if (type === "file" && files) {
+      setFormExercicio((prev) => ({ ...prev, [id]: files }));
+    } else {
+      setFormExercicio((prev) => ({ ...prev, [id]: value }));
+    }
   };
 
-  // Função que envia o formulario (Criando o exercicio ou atualizando)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (Object.values(formExercicio).some((v) => !v)) {
@@ -98,19 +109,35 @@ export default function Catalogo() {
 
     try {
       setLoading(true);
-      if (modalType === "Editar" && exercicioId != null) {
-        await updateExercicio(exercicioId, formExercicio);
+      if (modalType === "Editar" && exercicioSelecionado) {
+        await updateExercicio(exercicioSelecionado.id, formExercicio);
         setDados((prev) =>
           prev.map((item) =>
-            item.id === exercicioId ? { ...item, ...formExercicio } : item,
+            item.id === exercicioSelecionado.id
+              ? { ...item, ...formExercicio }
+              : item,
           ),
         );
+        if (formExercicio.video && formExercicio.video.length > 0) {
+          const videoRequests = {
+            exercicio_personal_id: exercicioSelecionado.id,
+            video: formExercicio.video,
+          };
+          await createVideoExercicio(videoRequests);
+        }
       } else {
         const novo = await createExercicio(formExercicio);
         setDados((prev) => [...prev, novo]);
+
+        if (formExercicio.video && formExercicio.video.length > 0) {
+          const videoRequests = {
+            exercicio_personal_id: novo.id,
+            video: formExercicio.video,
+          };
+          await createVideoExercicio(videoRequests);
+        }
       }
       alertSuccess("Seu catálogo de exercicios foi atualizado com sucesso");
-      setModalOpen(false);
       closeModal();
     } catch {
       alertError(
@@ -138,13 +165,14 @@ export default function Catalogo() {
   ) => {
     setModalType(type);
     setModalOpen(true);
+    setExercicioSelecionado(exercicio ?? null);
 
     if (type === "Editar" && exercicio) {
-      setExercicioId(exercicio.id);
       setFormExercicio({
         nome: exercicio.nome,
         grupo_muscular: exercicio.grupo_muscular,
         descricao: exercicio.descricao,
+        video: {} as FileList,
       });
     }
   };
@@ -154,10 +182,11 @@ export default function Catalogo() {
       nome: "",
       grupo_muscular: "",
       descricao: "",
+      video: {} as FileList,
     });
     setModalType(null);
     setModalOpen(false);
-    setExercicioId(null);
+    setExercicioSelecionado(null);
   };
 
   return (
@@ -181,27 +210,52 @@ export default function Catalogo() {
         ]}
       />
 
-      {/* ======= Modal Dinâmico ======= */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={closeModal}
-        title={
-          modalType === "Cadastrar" ? "Cadastrar Exercício" : "Editar Exercício"
-        }
-      >
-        <DynamicForm
-          campos={camposFormExercicio}
-          valores={{ ...formExercicio }}
-          onChange={handleChange}
-          onSubmit={handleSubmit}
-          loading={loading}
-          submitLabel={
+      {/* ======= Modal de Cadastro/Edição ======= */}
+      {(modalType === "Cadastrar" || modalType === "Editar") && (
+        <Modal
+          isOpen={modalOpen}
+          onClose={closeModal}
+          title={
             modalType === "Cadastrar"
-              ? "Cadastrar exercício"
-              : "Salvar alterações"
+              ? "Cadastrar Exercício"
+              : "Editar Exercício"
           }
-        />
-      </Modal>
+        >
+          <DynamicForm
+            campos={camposFormExercicio}
+            valores={{ ...formExercicio }}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+            loading={loading}
+            submitLabel={
+              modalType === "Cadastrar"
+                ? "Cadastrar exercício"
+                : "Salvar alterações"
+            }
+          />
+        </Modal>
+      )}
+
+      {/* ======= Modal de Vídeo ======= */}
+      {modalType === "Video" && exercicioSelecionado && (
+        <Modal
+          isOpen={modalOpen}
+          onClose={closeModal}
+          title={`Vídeo - ${exercicioSelecionado.nome}`}
+        >
+          {exercicioSelecionado.videoExercicios?.length > 0 ? (
+            <video
+              controls
+              className="w-full rounded-lg"
+              src={exercicioSelecionado.videoExercicios[0].url}
+            />
+          ) : (
+            <p className="text-center text-gray-500">
+              Nenhum vídeo disponível para este exercício.
+            </p>
+          )}
+        </Modal>
+      )}
     </>
   );
 }

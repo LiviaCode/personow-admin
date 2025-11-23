@@ -11,7 +11,7 @@ export interface dadosExercicio {
   descricao: string;
   created_at: string;
   updated_at: string;
-  videoExercicios: [];
+  videoExercicios: [{ url: string; filename: string }];
 }
 export async function getAllExercicio() {
   try {

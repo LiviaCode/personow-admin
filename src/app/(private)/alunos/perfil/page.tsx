@@ -60,7 +60,7 @@ export default function AtualizarAluno() {
   useEffect(() => {
     async function fetchAlunos() {
       try {
-        const response = await getAluno(state.id);
+        const response = await getAluno(Number(state.id));
 
         // Converte a data para o formato yyyy-MM-dd
         const dados = {

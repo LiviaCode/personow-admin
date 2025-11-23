@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import getAllAlunos from "@/app/http/aluno/get-all-aluno";
+import getAluno from "@/app/http/aluno/get-aluno";
 
 type logonAluno = {
   id: string;
@@ -35,13 +35,17 @@ export function AlunoContextProvider({ children }: AlunoContextProviderProps) {
   const [state, setState] = useState(inicialAluno);
 
   useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email) {
+    const id = localStorage.getItem("id");
+    if (id !== null) {
       async function fetchPersonals() {
         try {
-          const response = await getAllAlunos();
+          const response = await getAluno(Number(id));
 
-          const alunoLogado = response.find((aluno) => aluno.email === email);
+          const alunoLogado = {
+            id: String(response.id),
+            nome: response.nome,
+            email: response.email,
+          };
 
           if (alunoLogado) {
             setState(alunoLogado);

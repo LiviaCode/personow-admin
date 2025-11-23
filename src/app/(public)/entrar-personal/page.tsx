@@ -1,59 +1,48 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { setCookie } from "cookies-next"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-import { profilePersonal } from "@/app/http/personal/profile-personal"
-import { SignInForm, signInForm } from "@/app/schemas/sing-in-form"
-import { Label } from "@/components/label"
-import { Background } from "@/components/svg/background"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { profilePersonal } from "@/app/http/personal/profile-personal";
+import { SignInForm, signInForm } from "@/app/schemas/sing-in-form";
+import { Label } from "@/components/label";
+import { Background } from "@/components/svg/background";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPersonal() {
-  const router = useRouter()
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignInForm>({
     resolver: zodResolver(signInForm),
-  })
+  });
 
- async function onSubmit(data: SignInForm) {
-  try {
-    const response = await profilePersonal({
-      email: data.email,
-      password: data.password,
-    });
+  async function onSubmit(data: SignInForm) {
+    try {
+      const response = await profilePersonal({
+        email: data.email,
+        password: data.password,
+      });
 
-    console.log("LOGIN PERSONAL RESPONSE:", response);
+      // Salva token
+      setCookie("token", response.token, {
+        maxAge: 60 * 60 * 24,
+        path: "/",
+      });
 
-    // Salva token
-    setCookie("token", response.token, {
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
+      localStorage.setItem("id", String(response.id));
 
-    // Salva ID correto
-    setCookie("personal_id", response.id, {
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
-
-    console.log(" personal_id salvo:", response.id);
-
-    router.push("/admin");
-
-  } catch (err) {
-    console.error("Erro no login:", err);
-    alert("Falha no login, verifique suas credenciais.");
+      router.push("/admin");
+    } catch (err) {
+      console.error("Erro no login:", err);
+      alert("Falha no login, verifique suas credenciais.");
+    }
   }
-}
-
-
 
   return (
     <div className="flex h-screen">
@@ -64,7 +53,9 @@ export default function LoginPersonal() {
 
       <div className="flex w-full max-w-md flex-col justify-center bg-purple-900 p-10 text-white">
         <h2 className="mb-2 text-2xl font-bold">ENTRAR</h2>
-        <p className="mb-6 text-sm">Faça login inserindo suas informações abaixo.</p>
+        <p className="mb-6 text-sm">
+          Faça login inserindo suas informações abaixo.
+        </p>
         <hr className="mb-6 border-gray-400" />
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -76,7 +67,9 @@ export default function LoginPersonal() {
               placeholder="Digite seu e-mail"
               className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
             />
-            {errors.email && <p className="text-sm text-red-400">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-sm text-red-400">{errors.email.message}</p>
+            )}
           </div>
 
           <div>
@@ -87,7 +80,9 @@ export default function LoginPersonal() {
               placeholder="Digite sua senha"
               className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400"
             />
-            {errors.password && <p className="text-sm text-red-400">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-sm text-red-400">{errors.password.message}</p>
+            )}
           </div>
 
           <Button
@@ -107,5 +102,5 @@ export default function LoginPersonal() {
         </p>
       </div>
     </div>
-  )
+  );
 }

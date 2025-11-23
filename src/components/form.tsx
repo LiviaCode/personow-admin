@@ -21,7 +21,8 @@ export function DynamicForm({
   submitLabel,
 }: {
   campos: CampoForm[];
-  valores: Record<string, string | number>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  valores: Record<string, any>;
   onChange: (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -39,7 +40,7 @@ export function DynamicForm({
       {campos.map((campo) => (
         <div key={campo.key}>
           <Label htmlFor={campo.key} className="text-black">
-            {campo.label}:
+            {campo.label}
           </Label>
 
           {campo.type === "select" ? (
@@ -54,7 +55,7 @@ export function DynamicForm({
                 const label = typeof opt === "string" ? opt : opt.label;
                 return (
                   <option key={value} value={value}>
-                    {label || "Selecione"}
+                    {label}
                   </option>
                 );
               })}
@@ -66,6 +67,15 @@ export function DynamicForm({
               onChange={onChange}
               placeholder={campo.placeholder || ""}
               className="h-24 w-full rounded border border-orange-400 bg-transparent p-2 text-sm text-gray-700 placeholder:text-xs placeholder:text-gray-400"
+            />
+          ) : campo.type === "file" ? (
+            // 🔥 Caso especial para upload de vídeo/arquivo
+            <Input
+              id={campo.key}
+              type="file"
+              accept="video/*"
+              onChange={onChange}
+              className="w-full border border-orange-400 bg-transparent text-gray-700 file:mr-4 file:rounded file:border-0 file:bg-orange-400 file:px-3 file:py-1 file:text-sm file:font-semibold file:text-white hover:file:bg-orange-500"
             />
           ) : (
             <Input

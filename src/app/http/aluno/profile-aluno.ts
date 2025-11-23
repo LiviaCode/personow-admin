@@ -6,13 +6,8 @@ interface ProfileAlunoRequest {
 }
 
 interface ProfileAlunoResponse {
-  id(arg0: string, id: any, arg2: { maxAge: number; path: string; }): unknown;
+  id: string;
   token: string;
-  aluno: {
-    id: string;
-    nome: string;
-    email: string;
-  };
 }
 
 export async function profileAluno({

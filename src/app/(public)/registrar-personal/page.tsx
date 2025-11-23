@@ -55,6 +55,8 @@ export default function RegisterPersonal() {
         path: "/",
       })
 
+      localStorage.setItem("id", loginResponse.id);
+
       // 4️⃣ Redireciona para /admin
       router.push("/admin")
     } catch (error) {

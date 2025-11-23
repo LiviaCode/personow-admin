@@ -1,3 +1,5 @@
+import { ChevronRight } from "lucide-react";
+
 import {
   dadosPlano,
   dadosSessao,
@@ -46,18 +48,15 @@ export default function PlanoList({ planos, onOpenModal }: PlanoListProps) {
                   plano.SessaoTreinos.map((sessao) => (
                     <div
                       key={`sessao-${sessao.id}-${sessao.titulo}`}
-                      className="flex items-center justify-between border-b border-gray-700 py-1"
+                      className="flex items-center justify-between border-gray-700 py-1"
                     >
                       <span className="text-xs">
-                        {sessao.titulo}: {sessao.identificador}
+                        <b>{sessao.titulo}:</b> {sessao.identificador}
                       </span>
-                      <Button
-                        size="sm"
+                      <ChevronRight
                         onClick={() => onOpenModal("VerExercicios", sessao)}
-                        className="border border-gray-700 bg-transparent text-xs text-gray-700 hover:bg-orange-800"
-                      >
-                        Ver exercícios
-                      </Button>
+                        className="cursor-pointer text-black hover:text-orange-700"
+                      />
                     </div>
                   ))
                 ) : (
