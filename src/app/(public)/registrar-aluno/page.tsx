@@ -115,12 +115,15 @@ export default function RegisterAluno() {
               </div>
               <div>
                 <Label htmlFor="genero">Gênero</Label>
-                <select {...register('genero')} className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400">
-                  <option value="">Selecione</option>
-                  <option value="Feminino">Feminino</option>
-                  <option value="Masculino">Masculino</option>
-                  <option value="Outro">Outro</option>
-                </select>
+                <select
+                  {...register('genero')}
+                  className="w-full rounded border border-orange-400 bg-transparent p-2 text-white"
+                >
+                  <option value="" style={{ color: 'white' }}>Selecione</option>
+                  <option value="Feminino" style={{ color: 'black' }}>Feminino</option>
+                  <option value="Masculino" style={{ color: 'black' }}>Masculino</option>
+                  <option value="Outro" style={{ color: 'black' }}>Outro</option>
+                </select>   
               </div>
               <div>
                 <Label htmlFor="celular">Celular</Label>
@@ -138,7 +141,7 @@ export default function RegisterAluno() {
             <>
               <div>
                 <Label htmlFor="altura">Altura</Label>
-                <Input {...register('altura')} placeholder="Digite sua altura" step="0.01" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
+                <Input {...register('altura')} placeholder="Digite sua altura em cm" step="0.01" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
               <div>
                 <Label htmlFor="objetivo">Objetivo</Label>
@@ -153,17 +156,20 @@ export default function RegisterAluno() {
                 <Input {...register('condicaoMedica')} placeholder="descreva" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
               <div>
-                <Label htmlFor="historicoLesao">Historico de Lesão</Label>
+                <Label htmlFor="historicoLesao">Histórico de Lesão</Label>
                 <Input {...register('historicoLesao')} placeholder="descreva" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
               <div>
-                <Label htmlFor="nivelAtividade">Nivel de Atividade</Label>
-                 <select {...register('nivelAtividade')} className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400">
-                  <option value="">Selecione</option>
-                  <option value="Sedentário">Sedentário</option>
-                  <option value="Moderado">Moderado</option>
-                  <option value="Ativo">Ativo</option>
-                </select>
+                <Label htmlFor="nivelAtividade">Nível de Atividade</Label>
+                  <select
+                    {...register('nivelAtividade')}
+                    className="w-full rounded border border-orange-400 bg-transparent p-2 text-white"
+                  >
+                    <option value="" style={{ color: 'white' }}>Selecione</option>
+                    <option value="Sedentário" style={{ color: 'black' }}>Sedentário</option>
+                    <option value="Moderado" style={{ color: 'black' }}>Moderado</option>
+                    <option value="Ativo" style={{ color: 'black' }}>Ativo</option>
+                  </select>
               </div>
 
               <div className="flex gap-2 mt-4">

@@ -132,10 +132,18 @@ export default function RegisterPersonal() {
                 <Input {...register('experiencia')} placeholder="Digite sua experiência" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
               </div>
 
-              <div>
-                <Label htmlFor="modeloAtendimento">Modelo de Atendimento</Label>
-                <Input {...register('modeloAtendimento')} placeholder="presencial, online" className="w-full rounded border border-orange-400 bg-transparent p-2 text-white placeholder:text-gray-400" />
-              </div>
+                <div>
+                  <Label htmlFor="modeloAtendimento">Modelo de Atendimento</Label>
+
+                  <select
+                    {...register('modeloAtendimento')}
+                    className="w-full rounded border border-orange-400 bg-transparent p-2 text-white"
+                  >
+                    <option value="" style={{ color: 'white' }}>Selecione</option>
+                    <option value="presencial" style={{ color: 'black' }}>Presencial</option>
+                    <option value="online" style={{ color: 'black' }}>Online</option>
+                  </select>
+                </div>
 
               <div>
                 <Label htmlFor="cidade">Cidade</Label>
