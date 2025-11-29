@@ -5,7 +5,8 @@ export interface Agenda {
   date_init: string;
   date_end: string;
   personal_id: number;
-  aluno_id: number;
+  aluno_id?: number;  
+
 }
 
 export async function createAgenda({

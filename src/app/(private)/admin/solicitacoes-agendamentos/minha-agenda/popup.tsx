@@ -66,11 +66,12 @@ export default function PopupModal({ onClose, addEvent, dateTime }: PopupModalPr
     const personal_id = Number(localStorage.getItem('id'));
 
     const payload = {
-      title: 'Desabilitado',
-      date_init: start.format('YYYY-MM-DD HH:mm:ss'),
-      date_end: end.format('YYYY-MM-DD HH:mm:ss'),
+      title: "Desabilitado",
+      date_init: start.toISOString(), 
+      date_end: end.toISOString(),  
       personal_id: personal_id,
-    }
+    };
+
 
     console.log('Payload enviado à API:', payload)
 

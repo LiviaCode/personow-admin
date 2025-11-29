@@ -1,8 +1,10 @@
 "use client";
+
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 
 import { getAulaPersonal } from "@/app/http/agenda/get-aulas";
@@ -11,12 +13,14 @@ import PopupModal from "./popup";
 
 type NovoEvento = {
   title: string;
-  start: string;
-  end: string;
+  start: any;
+  end: any;
 };
 
 export default function Agenda() {
   const [events, setEvents] = useState<NovoEvento[]>([]);
+  const [popupModal, setPopupModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   useEffect(() => {
     async function getAulasAgendada() {
@@ -26,40 +30,44 @@ export default function Agenda() {
       const response = await getAulaPersonal(idPersonal);
       if (!response) return;
 
-      // Mapeia e filtra os dois tipos de eventos
+      // Aulas aceitas pelo personal
       const aulasAceitas =
         response.AulaAgendas?.filter((a) => a.status === "aceita").map((a) => ({
           title: a.endereco,
-          start: a.date_init,
-          end: a.date_end,
+          start: dayjs(a.date_init).toDate(), // corrigido
+          end: dayjs(a.date_end).toDate(),   // corrigido
         })) ?? [];
 
+      // Horários desabilitados (PersonalAgendas)
       const horariosDesmarcados =
         response.PersonalAgendas?.map((h) => ({
           title: h.title,
-          start: h.date_init,
-          end: h.date_end,
+          start: dayjs(h.date_init).toDate(), // corrigido
+          end: dayjs(h.date_end).toDate(),   // corrigido
         })) ?? [];
 
-      // Une todos os eventos de uma vez só
+      // Une tudo
       setEvents([...aulasAceitas, ...horariosDesmarcados]);
     }
 
     getAulasAgendada();
   }, []);
 
-  const [popupModal, setPopupModal] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-
   const onDateClick = (info: { dateStr: string }) => {
-    console.log("Data clicada:", info.dateStr);
     setSelectedDate(info.dateStr);
     setPopupModal(true);
   };
 
   const addEvento = (evento: NovoEvento) => {
-    console.log("Adicionando evento:", evento);
-    setEvents((prev) => [...prev, evento]);
+
+    setEvents((prev) => [
+      ...prev,
+      {
+        title: evento.title,
+        start: dayjs(evento.start).toDate(),
+        end: dayjs(evento.end).toDate(),
+      },
+    ]);
   };
 
   return (
@@ -67,6 +75,7 @@ export default function Agenda() {
       <div className="flex items-center text-2xl font-semibold text-text-web">
         Minha Agenda
       </div>
+
       <span>Selecione os horários que deseja desabilitar</span>
 
       <div className="overflow-x-auto">
@@ -81,7 +90,7 @@ export default function Agenda() {
             dateClick={onDateClick}
             locale="pt-br"
             nowIndicator={true}
-            editable={true}
+            editable={false}
             height="460px"
             headerToolbar={{
               right: "today prev,next",
@@ -89,6 +98,7 @@ export default function Agenda() {
               left: "dayGridMonth,timeGridWeek,timeGridDay",
             }}
           />
+
           {popupModal && selectedDate && (
             <PopupModal
               onClose={() => setPopupModal(false)}
