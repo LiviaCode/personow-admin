@@ -1,24 +1,27 @@
 import { api } from "../../api-client";
 
-export interface Agenda {
-  title: string;
+export interface SolicitacaoAgenda {
   date_init: string;
   date_end: string;
   personal_id: number;
   aluno_id: number;
+  endereco: string;
+  status: string;
 }
 
-export async function createAgenda({
-  title,
+export async function createSolicitacaoAgenda({
+  endereco,
+  status,
   date_init,
   date_end,
   personal_id,
   aluno_id,
-}: Agenda) {
+}: SolicitacaoAgenda) {
   await api
-    .post("personal/agenda", {
+    .post("agenda", {
       json: {
-        title,
+        endereco,
+        status,
         date_init,
         date_end,
         personal_id,

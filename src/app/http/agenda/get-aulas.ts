@@ -20,11 +20,19 @@ export interface AulaAgenda {
   };
 }
 
+// 🔧 ATUALIZADO: tipagem mais completa, alinhada com a agenda que o aluno criou
 export interface PersonalAgenda {
   id: string;
   title: string;
   date_init: string;
   date_end: string;
+  status: string;
+  aluno_id: string;
+  Aluno?: {
+    id: string;
+    nome: string;
+    email: string;
+  };
 }
 
 export async function getAulaPersonal(id: string) {
@@ -33,8 +41,11 @@ export async function getAulaPersonal(id: string) {
       .get(`personal/${id}?$select=id&$expand=aulas,agenda`)
       .json<getAulaResponse>();
 
+    console.log("DEBUG getAulaPersonal RESPONSE:", response);
+    console.log("AulaAgendas:", response.AulaAgendas);
+    console.log("PersonalAgendas (agenda):", response.PersonalAgendas);
+
     return response;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error.response) {
       const status = error.response.status;

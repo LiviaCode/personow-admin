@@ -3,11 +3,10 @@
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
-import { getCookie } from "cookies-next";
 import { X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-import { createAgenda } from "@/app/http/agenda/create-agenda";
+import { createSolicitacaoAgenda } from "@/app/http/agenda/cerate-solicitacao-agenda";
 import {
   Carousel,
   CarouselContent,
@@ -27,12 +26,11 @@ export default function PersonalAgenda(props: {
   const [horaSelect, setHoraSelect] = useState<string>("");
 
   // ---------------------------------------------------------
-  // CONSOLE LOGS NO INÍCIO PARA DEBUG
+  // DEBUG
   // ---------------------------------------------------------
   useEffect(() => {
     console.log("============== DEBUG AGENDA ==============");
-    console.log("Cookie aluno_id:", getCookie("aluno_id"));
-    console.log("Cookie aluno_nome:", getCookie("aluno_nome"));
+    console.log("ID do aluno salvo no localStorage:", localStorage.getItem("id"));
     console.log("Props.personalId RECEBIDO:", props.personalId);
     console.log("==========================================");
   }, []);
@@ -53,13 +51,13 @@ export default function PersonalAgenda(props: {
   async function confirmarAgendamento() {
     console.log("---- DEBUG CONFIRMAR ----");
 
-    const aluno_id = Number(getCookie("aluno_id"));
+    const aluno_id = Number(localStorage.getItem("id")); // <-- FIX AQUI
     const personal_id = props.personalId;
 
     console.log("dataSelect:", dataSelect);
     console.log("horaSelect:", horaSelect);
-    console.log("aluno_id (cookie):", aluno_id);
-    console.log("personal_id (props):", personal_id);
+    console.log("aluno_id:", aluno_id);
+    console.log("personal_id:", personal_id);
 
     if (!dataSelect || !horaSelect) {
       alert("Selecione a data e o horário.");
@@ -79,18 +77,18 @@ export default function PersonalAgenda(props: {
     console.log("date_end:", date_end);
 
     const payload = {
-      title: "Aula",
+      endereco: "Remoto",
       date_init,
       date_end,
-      aluno_id,
-      personal_id,
+      aluno_id,      
+      personal_id,   
       status: "pendente",
     };
 
     console.log("Payload enviado:", payload);
 
     try {
-      const response = await createAgenda(payload);
+      const response = await createSolicitacaoAgenda(payload);
       console.log("RESPOSTA createAgenda:", response);
 
       alert("Solicitação enviada!");

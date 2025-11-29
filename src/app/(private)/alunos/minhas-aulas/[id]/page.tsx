@@ -2,9 +2,10 @@
 
 import { CalendarDays, ChevronLeft } from "lucide-react";
 import { useParams } from "next/navigation";
+import router from "next/router";
 import { useEffect, useState } from "react";
 
-import { dadosPlano,getAllPlano } from "@/app/http/planos-treino/get-all-planos";
+import { dadosPlano, getAllPlano } from "@/app/http/planos-treino/get-all-planos";
 
 export default function PlanoDetalhes() {
   const params = useParams();
@@ -38,6 +39,17 @@ export default function PlanoDetalhes() {
     return <div className="text-white text-center mt-10">Plano não encontrado.</div>;
   }
 
+  const groupExercisesByMuscle = (sessao: any) => {
+    return sessao.itemExercicios.reduce((groups: any, item: any) => {
+      const muscleGroup = item.ExercicioPersonal.grupo_muscular;
+      if (!groups[muscleGroup]) {
+        groups[muscleGroup] = [];
+      }
+      groups[muscleGroup].push(item);
+      return groups;
+    }, {});
+  };
+
   return (
     <div className="min-h-screen bg-purple-900 text-white p-4">
       {/* Header */}
@@ -46,7 +58,7 @@ export default function PlanoDetalhes() {
           <ChevronLeft className="size-6" />
         </button>
         <h1 className="text-lg font-semibold flex-1">
-          Treinos - {plano.personal_nome}
+          Treinos 
         </h1>
         <CalendarDays className="text-orange-400 size-6" />
       </header>
@@ -68,33 +80,37 @@ export default function PlanoDetalhes() {
       </div>
 
       {/* Grupo muscular e exercícios */}
-      <div className="bg-purple-800 rounded-2xl p-4">
-        <h2 className="text-white font-semibold mb-4">Grupo</h2>
-
+      <div className="bg-purple-800 rounded-2xl p-4 space-y-4">
         {plano.SessaoTreinos.length > 0 ? (
-          plano.SessaoTreinos.map((sessao) => (
-            <div key={sessao.id} className="space-y-3">
-              {sessao.itemExercicios.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-yellow-400 text-purple-900 rounded-2xl p-3 grid grid-cols-[1fr_auto] items-center cursor-pointer hover:opacity-90 transition"
-                >
-                  <div>
-                    <h3 className="font-semibold text-sm">
-                      {item.ExercicioPersonal.nome}
-                    </h3>
-                    <p className="text-xs">Repetições: {item.repeticoes}</p>
-                    <p className="text-xs text-gray-700">
-                      {item.ExercicioPersonal.grupo_muscular}
-                    </p>
-                  </div>
-                  <div className="row-span-2 flex justify-center text-orange-500">
-                    <ChevronLeft className="rotate-180 size-6 sm:size-10" />
-                  </div>
+          plano.SessaoTreinos.map((sessao) => {
+            const groupedExercises = groupExercisesByMuscle(sessao);
+
+            return Object.keys(groupedExercises).map((grupoMuscular) => (
+              <div key={grupoMuscular} className="space-y-4">
+                <h2 className="text-white font-semibold mb-4">{grupoMuscular}</h2>
+
+                <div className="grid gap-4">
+                  {groupedExercises[grupoMuscular].map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-yellow-400 text-purple-900 rounded-2xl p-3 grid grid-cols-[1fr_auto] items-center cursor-pointer hover:opacity-90 transition"
+                      onClick={() => router.push(`/minhas-aulas/${item.id}`)}   // Navega para a página de detalhes
+                    >
+                      <div>
+                        <h3 className="font-semibold text-sm">
+                          {item.ExercicioPersonal.nome}
+                        </h3>
+                        <p className="text-xs">Repetições: {item.repeticoes}</p>
+                      </div>
+                      <div className="row-span-2 flex justify-center text-orange-500">
+                        <ChevronLeft className="rotate-180 size-6 sm:size-10" />
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ))
+              </div>
+            ));
+          })
         ) : (
           <p className="text-gray-400 text-sm">Nenhum exercício encontrado.</p>
         )}

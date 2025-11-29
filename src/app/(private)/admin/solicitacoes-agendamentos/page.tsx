@@ -29,26 +29,37 @@ export default function Solicitacao() {
   useEffect(() => {
     async function getAlunos() {
       const idPersonal = localStorage.getItem("id");
-      if (idPersonal !== null) {
-        const response = await getAulaPersonal(idPersonal);
-        const aulasMarcadas =
-          response?.AulaAgendas?.map((dado) => {
-            const dataObj = new Date(dado.date_init);
 
-            return {
-              id: dado.id,
-              nome: dado.Aluno?.nome ?? "",
-              status: dado.status,
-              data: dataObj.toLocaleDateString("pt-BR"), // só a data
-              hora: dataObj.toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              }),
-            };
-          }) ?? [];
+      console.log("ID PERSONAL (localStorage):", idPersonal);
 
-        setDados(aulasMarcadas);
+      if (!idPersonal) {
+        console.warn("Nenhum id de personal encontrado no localStorage");
+        return;
       }
+
+      const response = await getAulaPersonal(idPersonal);
+
+      console.log("Resposta completa getAulaPersonal:", response);
+
+      const solicitacoes =
+        response?.AulaAgendas?.map((dado) => {
+          const dataObj = new Date(dado.date_init);
+
+          return {
+            id: dado.id,
+            nome: dado.Aluno?.nome ?? `Aluno ${dado.aluno_id ?? ""}`,
+            status: dado.status,
+            data: dataObj.toLocaleDateString("pt-BR"),
+            hora: dataObj.toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+        }) ?? [];
+
+      console.log("Solicitações mapeadas para tabela:", solicitacoes);
+
+      setDados(solicitacoes);
     }
 
     getAlunos();
@@ -58,12 +69,13 @@ export default function Solicitacao() {
     try {
       await updateAgenda({ id, status });
 
-      // atualiza apenas o item alterado no estado
+      // atualiza no estado apenas o item alterado
       setDados((prev) =>
         prev.map((aula) => (aula.id === id ? { ...aula, status } : aula)),
       );
       alertSuccess(`Solicitação ${status} com sucesso!`);
     } catch (error) {
+      console.error("Erro ao atualizar solicitação:", error);
       alertError(
         `Falha ao tentar ${status} solicitação, tente novamente mais tarde.`,
       );
@@ -79,7 +91,7 @@ export default function Solicitacao() {
       actions={[
         {
           label: "Aceitar",
-          onClick: (a) => responderSolicitacao(a.id, "aceita"), // ou "Em andamento"
+          onClick: (a) => responderSolicitacao(a.id, "aceita"),
         },
         {
           label: "Recusar",
