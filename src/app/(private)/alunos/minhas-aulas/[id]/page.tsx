@@ -1,14 +1,14 @@
 "use client";
 
 import { CalendarDays, ChevronLeft } from "lucide-react";
-import { useParams } from "next/navigation";
-import router from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { dadosPlano, getAllPlano } from "@/app/http/planos-treino/get-all-planos";
 
 export default function PlanoDetalhes() {
   const params = useParams();
+   const router = useRouter();
   const planoId = Number(params.id);
 
   const [plano, setPlano] = useState<dadosPlano | null>(null);
@@ -54,7 +54,7 @@ export default function PlanoDetalhes() {
     <div className="min-h-screen bg-purple-900 text-white p-4">
       {/* Header */}
       <header className="flex items-center gap-4 mb-4">
-        <button onClick={() => history.back()} className="text-orange-400">
+          <button onClick={() => router.back()} className="text-orange-400">
           <ChevronLeft className="size-6" />
         </button>
         <h1 className="text-lg font-semibold flex-1">
@@ -94,13 +94,14 @@ export default function PlanoDetalhes() {
                     <div
                       key={item.id}
                       className="bg-yellow-400 text-purple-900 rounded-2xl p-3 grid grid-cols-[1fr_auto] items-center cursor-pointer hover:opacity-90 transition"
-                      onClick={() => router.push(`/minhas-aulas/${item.id}`)}   // Navega para a página de detalhes
+                       onClick={() => router.push(
+                      `exercicio/${item.ExercicioPersonal.id}?dados=${encodeURIComponent(JSON.stringify(item.ExercicioPersonal))}`)}
                     >
                       <div>
                         <h3 className="font-semibold text-sm">
                           {item.ExercicioPersonal.nome}
                         </h3>
-                        <p className="text-xs">Repetições: {item.repeticoes}</p>
+                        <p className="text-xs">Repetições: {item.repeticoes} </p>
                       </div>
                       <div className="row-span-2 flex justify-center text-orange-500">
                         <ChevronLeft className="rotate-180 size-6 sm:size-10" />
