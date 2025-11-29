@@ -31,12 +31,13 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
       const response = await createChat(NewChat);
       console.log(response);
       router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errorMsg = error?.errors[0] || [];
 
       if (
         errorMsg.includes(
-          "Já existe uma conversa iniciada entre este aluno e o Personal"
+          "Já existe uma conversa iniciada entre este aluno e o Personal",
         )
       ) {
         router.push(`/alunos/mensagens/${state.id}-${personal.id}`);
@@ -52,7 +53,7 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
             src={
               Array.isArray(personal.PersonalFotos) &&
               personal.PersonalFotos.length > 0
-                ? `http://localhost:3018/images/${personal.PersonalFotos.at(-1)?.filename}`
+                ? `http://34.39.211.212:3018/images/${personal.PersonalFotos.at(-1)?.filename}`
                 : "/perfil-sem-foto.png"
             }
             alt={`Foto de ${personal.nome}`}
@@ -108,7 +109,6 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
 
       {/* BOTÕES */}
       <div className="mx-auto flex w-full flex-col gap-4 md:w-1/3">
-
         <button
           onClick={onSubmit}
           className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-orange-500 p-2 text-orange-500 transition hover:bg-orange-500 hover:text-white"
@@ -130,7 +130,7 @@ export function ProfileDetails({ personal }: ProfileDetailsProps) {
       {openAgenda && (
         <PersonalAgenda
           setAgenda={setOpenAgenda}
-          personalId={personal.id}   // <── PASSANDO O ID DO PERSONAL
+          personalId={personal.id} // <── PASSANDO O ID DO PERSONAL
         />
       )}
     </div>

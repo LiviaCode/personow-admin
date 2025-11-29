@@ -5,13 +5,13 @@ export interface getAlunoResponse {
   nome: string;
   email: string;
   dateNascimento?: string;
-  genero?: string
+  genero?: "Masculino" | "Feminino" | "Outro";
   celular?: string;
   altura?: string;
   peso?: string;
   condicaoMedica?: string;
   historicoLesao?: string;
-  nivelAtividade?: string;
+  nivelAtividade?: "Sedentário" | "Moderado" | "Ativo";
   objetivo?: string;
   Endereco?: string;
   AlunoFotos?: [{ url: string; filename: string }];

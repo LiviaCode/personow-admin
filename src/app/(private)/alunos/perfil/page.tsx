@@ -65,11 +65,12 @@ export default function AtualizarAluno() {
         // Converte a data para o formato yyyy-MM-dd
         const dados = {
           ...response,
+          id: String(response.id),
           dateNascimento: response.dateNascimento?.split("T")[0], // pega só a parte da data
         };
 
         if (dados.AlunoFotos && dados.AlunoFotos.length > 0) {
-          const urlFotos = `http://localhost:3018/images/${dados.AlunoFotos.at(-1)?.filename}`;
+          const urlFotos = `http://34.39.211.212:3018/images/${dados.AlunoFotos.at(-1)?.filename}`;
           setFoto(urlFotos);
         }
         reset(dados);
