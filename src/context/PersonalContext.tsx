@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import getAllPersonals from "@/app/http/personal/get-all-personal";
+import getPersonal from "@/app/http/personal/get-personal";
 
 type logonPersonal = {
   id: number;
@@ -37,19 +37,12 @@ export function PersonalContextProvider({
   const [state, setState] = useState(inicialPersonal);
 
   useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email) {
+    const id = localStorage.getItem("id");
+    if (id) {
       async function fetchPersonals() {
         try {
-          const response = await getAllPersonals();
-
-          const personalLogado = response.find(
-            (personal) => personal.email === email,
-          );
-
-          if (personalLogado) {
-            setState(personalLogado);
-          }
+          const response = await getPersonal(String(id));
+          setState(response);
         } catch (error) {
           console.error("Erro ao listar:", error);
         }

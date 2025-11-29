@@ -2,9 +2,11 @@
 import { ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { useRef, useState } from "react";
 
 import createMessage from "@/app/http/chat/create-message";
+import { connectSocket, socket } from "@/lib/socket";
 
 import { Mensagem } from "./mensagem";
 
@@ -42,6 +44,23 @@ export function ChatScreen({ chat }: ChatScreenProps) {
   const [mensagens, setmensagens] = useState(sortedMessages);
   const messageInput = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    connectSocket();
+
+    // entrar automaticamente na sala da conversa (se seu backend usa sala)
+    socket.emit("join_conversation", chat.id_chat);
+
+    // receber mensagem
+    socket.on("nova_mensagem", (msg) => {
+      setmensagens((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.off("nova_mensagem");
+    };
+  }, [chat.id_chat]);
+
+  // Função que envia uma nova mensagem
   async function handleCreateMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -54,9 +73,7 @@ export function ChatScreen({ chat }: ChatScreenProps) {
     };
 
     try {
-      const response = await createMessage(NewMessage);
-      setmensagens((prev) => [...prev, response]);
-
+      await createMessage(NewMessage);
       if (messageInput.current) messageInput.current.value = "";
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
