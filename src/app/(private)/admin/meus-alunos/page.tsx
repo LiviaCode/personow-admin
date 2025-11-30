@@ -56,8 +56,18 @@ export default function MeusAlunos() {
     setModalOpen(true);
     setLoadingDetalhe(true);
     try {
-      const detalhe = await getAluno(Number(id));
-      setAlunoDetalhe(detalhe);
+      const response = await getAluno(Number(id));
+      const aluno_formatado = {
+        ...response,
+        data_nascimento: response.dateNascimento
+          ? new Date(response.dateNascimento).toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })
+          : "",
+      };
+      setAlunoDetalhe(aluno_formatado);
     } catch (error) {
       console.error("Erro ao buscar detalhes do aluno:", error);
     } finally {

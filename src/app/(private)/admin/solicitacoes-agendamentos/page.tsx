@@ -29,18 +29,15 @@ export default function Solicitacao() {
   useEffect(() => {
     async function getAlunos() {
       const idPersonal = localStorage.getItem("id");
-
-      console.log("ID PERSONAL (localStorage):", idPersonal);
-
       if (!idPersonal) {
-        console.warn("Nenhum id de personal encontrado no localStorage");
+        // Nenhum id de personal encontrado no localStorage
+        alertError(
+          `Falha ao tentar carregar alunos, tente novamente mais tarde.`,
+        );
         return;
       }
 
       const response = await getAulaPersonal(idPersonal);
-
-      console.log("Resposta completa getAulaPersonal:", response);
-
       const solicitacoes =
         response?.AulaAgendas?.map((dado) => {
           const dataObj = new Date(dado.date_init);
@@ -56,9 +53,6 @@ export default function Solicitacao() {
             }),
           };
         }) ?? [];
-
-      console.log("Solicitações mapeadas para tabela:", solicitacoes);
-
       setDados(solicitacoes);
     }
 
@@ -75,7 +69,6 @@ export default function Solicitacao() {
       );
       alertSuccess(`Solicitação ${status} com sucesso!`);
     } catch (error) {
-      console.error("Erro ao atualizar solicitação:", error);
       alertError(
         `Falha ao tentar ${status} solicitação, tente novamente mais tarde.`,
       );

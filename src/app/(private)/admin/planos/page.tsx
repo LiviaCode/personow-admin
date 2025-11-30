@@ -2,66 +2,84 @@
 
 import { useEffect, useState } from "react";
 
+import createPlano from "@/app/http/personal/create-plano";
+import deletePlano from "@/app/http/personal/delete-plano";
+import getAllPlano, {
+  GetAllPlanoResponse,
+} from "@/app/http/personal/get-all-planos";
+import updatePlano from "@/app/http/personal/update-plano";
 import { alertError, alertSuccess } from "@/components/alert";
 import { CampoForm, DynamicForm } from "@/components/form";
 import { TablePersonal } from "@/components/tablePersonal";
 import Modal from "@/components/ui/modal";
 
 const columns = [
-  { key: "tipo", label: "Tipo" },
+  { key: "id", label: "Id" },
+  { key: "tipo_plano", label: "Tipo" },
   { key: "valor", label: "Valor" },
-  { key: "status", label: "Status", searchable: true },
+  { key: "updated_at", label: "Data de atualização" },
 ];
 
 const camposFormPlanos: CampoForm[] = [
   {
-    key: "tipo",
+    key: "tipo_plano",
     label: "Tipo de plano:",
     type: "select",
-    options: ["Aula avulsa", "Mensal", "Semestral", "Anual"],
+    options: ["Avulsa", "Experimental", "Mensal", "Bimestral", "Trimestral"],
   },
   {
-    key: "Valor",
+    key: "valor",
     label: "Digite o preço do plano:",
     type: "number",
-  },
-  {
-    key: "status",
-    label: "Status:",
-    type: "select",
-    options: ["ativo", "inativo"],
   },
 ];
 
 type createPlanoRequest = {
-  tipo: string;
+  tipo_plano: "Avulsa" | "Experimental" | "Mensal" | "Bimestral" | "Trimestral";
   valor: number;
-  status: string;
 };
 
 export default function Planos() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<
-    "Cadastrar" | "Editar" | "Video" | null
-  >(null);
-  const [dados, setDados] = useState<createPlanoRequest[]>([]);
+  const [modalType, setModalType] = useState<"Cadastrar" | "Editar" | null>(
+    null,
+  );
+  const [dados, setDados] = useState<GetAllPlanoResponse[]>([]);
   const [formPlano, setFormPlano] = useState<createPlanoRequest>({
-    tipo: "",
+    tipo_plano: "Avulsa",
     valor: 0,
-    status: "",
   });
   const [loading, setLoading] = useState(false);
   const [planoSelecionado, setPlanoSelecionado] =
-    useState<createPlanoRequest | null>(null);
+    useState<GetAllPlanoResponse | null>(null);
 
   // ======= Busca inicial =======
-  useEffect(() => {
-    getPlanos();
-  }, []);
+  const [id, setId] = useState<string | null>(null);
 
-  async function getPlanos() {
+  useEffect(() => {
+    const storedId = localStorage.getItem("id");
+    setId(storedId);
+    if (!id) return;
+    getPlanos(id);
+  }, [id]);
+
+  async function getPlanos(id: string) {
     try {
       //puxar da api os planos
+      const response = await getAllPlano(id);
+
+      const formatado = response.map((item) => ({
+        ...item,
+        updated_at: new Date(item.updated_at).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
+
+      setDados(formatado);
     } catch (error) {
       console.error("Erro ao buscar exercícios:", error);
     }
@@ -80,7 +98,41 @@ export default function Planos() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (Object.values(formPlano).some((v) => !v)) {
+      console.log(formPlano);
+      alertError("Preencha todos os campos!");
+      return;
+    }
+
     try {
+      setLoading(true);
+
+      if (modalType === "Editar" && planoSelecionado) {
+        await updatePlano(planoSelecionado.id, formPlano);
+        setDados((prev) =>
+          prev.map((item) =>
+            item.id === planoSelecionado.id ? { ...item, ...formPlano } : item,
+          ),
+        );
+      } else {
+        if (!id) return;
+        const body = {
+          personal_id: id,
+          ...formPlano,
+        };
+        const novo = await createPlano(body);
+        const formatado = {
+          ...novo.data,
+          updated_at: new Date(novo.data.updated_at).toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+        setDados((prev) => [...prev, formatado]);
+      }
       alertSuccess("Seu catálogo de planos foi atualizado com sucesso");
       closeModal();
     } catch {
@@ -90,9 +142,11 @@ export default function Planos() {
     }
   };
 
-  async function excluirPlano() {
+  async function excluirPlano(id: string) {
     try {
+      await deletePlano(id);
       alertSuccess("Plano deletado com sucesso");
+      setDados((prev) => prev.filter((item) => item.id !== id));
     } catch {
       alertError("Falha ao deletar o plano, tente novamente mais tarde.");
     }
@@ -101,7 +155,7 @@ export default function Planos() {
   // ======= Modal =======
   const openModal = (
     type: "Cadastrar" | "Editar",
-    plano?: createPlanoRequest,
+    plano?: GetAllPlanoResponse,
   ) => {
     setModalType(type);
     setModalOpen(true);
@@ -109,9 +163,8 @@ export default function Planos() {
 
     if (type === "Editar" && plano) {
       setFormPlano({
-        tipo: plano.tipo,
+        tipo_plano: plano.tipo_plano,
         valor: plano.valor,
-        status: plano.status,
       });
     }
   };
@@ -135,7 +188,7 @@ export default function Planos() {
             label: "Editar",
             onClick: (x) => openModal("Editar", x),
           },
-          { label: "Excluir", onClick: () => excluirPlano() },
+          { label: "Excluir", onClick: (x) => excluirPlano(x.id) },
         ]}
       />
 

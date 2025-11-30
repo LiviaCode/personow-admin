@@ -13,7 +13,9 @@ import PopupModal from "./popup";
 
 type NovoEvento = {
   title: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   start: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   end: any;
 };
 
