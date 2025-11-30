@@ -1,5 +1,7 @@
 import { api } from "@/app/api-client";
 
+// Essa rota é para o personal criar os tipos de planos com o valor que ele cobra as aulas
+// O personal precisa ter criado uma subconta para o aluno efetuar a cobrança
 export interface CreatePlanoRequest {
   personal_id: string;
   tipo_plano: "Avulsa" | "Experimental" | "Mensal" | "Bimestral" | "Trimestral";
@@ -23,7 +25,7 @@ export interface CreatePlanoResponse {
   };
 }
 
-export default async function createPlano(data: CreatePlanoRequest) {
+export default async function createPlanoPagamento(data: CreatePlanoRequest) {
   try {
     const response = await api
       .post("personal/planos/", {

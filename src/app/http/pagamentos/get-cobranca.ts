@@ -1,8 +1,20 @@
 import { api } from "@/app/api-client";
 
-export default async function deletePlano(id: string) {
+export interface CreateClienteResponse {
+  id: string;
+  dateCreated: string;
+  value: string;
+  description: string;
+  status: string;
+  invoiceUrl: string; // Link para o pagamento
+}
+
+export default async function createCliente(id: string) {
   try {
-    const response = await api.delete(`personal/planos/${id}`).json();
+    const response = await api
+      .post(`cobranca/${id}`)
+      .json<CreateClienteResponse>();
+
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

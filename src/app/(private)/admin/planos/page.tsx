@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-import createPlano from "@/app/http/personal/create-plano";
-import deletePlano from "@/app/http/personal/delete-plano";
-import getAllPlano, {
+import createPlanoPagamento from "@/app/http/pagamentos/create-plano";
+import deletePlanoPagamento from "@/app/http/pagamentos/delete-plano";
+import getAllPlanoPagamento, {
   GetAllPlanoResponse,
-} from "@/app/http/personal/get-all-planos";
-import updatePlano from "@/app/http/personal/update-plano";
+} from "@/app/http/pagamentos/get-all-planos";
+import updatePlano from "@/app/http/pagamentos/update-plano";
 import { alertError, alertSuccess } from "@/components/alert";
 import { CampoForm, DynamicForm } from "@/components/form";
 import { TablePersonal } from "@/components/tablePersonal";
@@ -66,7 +66,7 @@ export default function Planos() {
   async function getPlanos(id: string) {
     try {
       //puxar da api os planos
-      const response = await getAllPlano(id);
+      const response = await getAllPlanoPagamento(id);
 
       const formatado = response.map((item) => ({
         ...item,
@@ -120,7 +120,7 @@ export default function Planos() {
           personal_id: id,
           ...formPlano,
         };
-        const novo = await createPlano(body);
+        const novo = await createPlanoPagamento(body);
         const formatado = {
           ...novo.data,
           updated_at: new Date(novo.data.updated_at).toLocaleString("pt-BR", {
@@ -144,7 +144,7 @@ export default function Planos() {
 
   async function excluirPlano(id: string) {
     try {
-      await deletePlano(id);
+      await deletePlanoPagamento(id);
       alertSuccess("Plano deletado com sucesso");
       setDados((prev) => prev.filter((item) => item.id !== id));
     } catch {

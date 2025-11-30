@@ -85,7 +85,9 @@ export default function DynamicModal(props: DynamicModalProps) {
                 key={ex.id}
                 className="rounded border border-gray-200 p-2 text-sm"
               >
-                <b>{ex.ExercicioPersonal.nome}</b>
+                <div className="flex items-center justify-between">
+                  <b>{ex.ExercicioPersonal.nome}</b>
+                </div>
                 <p>
                   {ex.series} séries de {ex.repeticoes} repetições — descanso:{" "}
                   {ex.tempo_descanso_segundos}

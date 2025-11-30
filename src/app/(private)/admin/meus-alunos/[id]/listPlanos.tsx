@@ -1,29 +1,31 @@
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Pencil, Trash2 } from "lucide-react";
 
 import {
   dadosPlano,
   dadosSessao,
 } from "@/app/http/planos-treino/get-all-planos";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 type PlanoListProps = {
   planos: dadosPlano[];
+  onExcluirPlano: (id: number) => void;
+  onExcluirSessao: (planoId: number, sessaoId: number) => void;
   onOpenModal: (
     type: "VerExercicios" | "CriarPlano" | "CriarSessao",
     sessao?: dadosSessao,
   ) => void;
 };
 
-export default function PlanoList({ planos, onOpenModal }: PlanoListProps) {
+export default function PlanoList({
+  planos,
+  onExcluirPlano,
+  onExcluirSessao,
+  onOpenModal,
+}: PlanoListProps) {
   return (
     <div className="max-h-[75vh] w-full overflow-y-auto rounded-lg bg-purple-800">
       <div className="flex items-center p-5 text-white">
         <Label>Lista dos planos</Label>
-        {/* <input
-          type="date"
-          className="w-32 rounded border border-white bg-transparent p-2 focus:outline-none"
-        /> */}
       </div>
 
       <div className="flex flex-col gap-4 px-5">
@@ -37,10 +39,16 @@ export default function PlanoList({ planos, onOpenModal }: PlanoListProps) {
                 <span className="text-md font-medium">{plano.nome}</span>
                 <span className="text-md">{plano.status}</span>
               </div>
-              <span className="text-xs">
-                {new Date(plano.data_inicio).toLocaleDateString("pt-BR")} →{" "}
-                {new Date(plano.data_fim).toLocaleDateString("pt-BR")}
-              </span>
+              <div className="flex items-center justify-between">
+                {" "}
+                <span className="text-xs">
+                  {new Date(plano.data_inicio).toLocaleDateString("pt-BR")} →{" "}
+                  {new Date(plano.data_fim).toLocaleDateString("pt-BR")}
+                </span>
+                <button onClick={() => onExcluirPlano(plano.id)}>
+                  <Trash2 size={18} />
+                </button>
+              </div>
 
               {/* ======= Sessões ======= */}
               <div className="mt-2 rounded p-1 text-sm">
@@ -48,8 +56,15 @@ export default function PlanoList({ planos, onOpenModal }: PlanoListProps) {
                   plano.SessaoTreinos.map((sessao) => (
                     <div
                       key={`sessao-${sessao.id}-${sessao.titulo}`}
-                      className="flex items-center justify-between border-gray-700 py-1"
+                      className="flex items-center justify-between rounded-sm border-gray-700 bg-orange-500 p-1 py-1"
                     >
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => onExcluirSessao(plano.id, sessao.id)}
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
                       <span className="text-xs">
                         <b>{sessao.titulo}:</b> {sessao.identificador}
                       </span>

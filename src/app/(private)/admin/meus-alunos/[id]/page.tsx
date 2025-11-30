@@ -1,5 +1,7 @@
 "use client";
 
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import getAluno from "@/app/http/aluno/get-aluno";
@@ -19,6 +21,8 @@ import {
   createSessao,
   createSessaoRequest,
 } from "@/app/http/planos-treino/create-sessao";
+import { deletePlano } from "@/app/http/planos-treino/delete-plano";
+import { deleteSessao } from "@/app/http/planos-treino/delete-sessao";
 import {
   dadosPlano,
   dadosSessao,
@@ -91,7 +95,6 @@ export default function Sessaos({ params }: ProfilePersonalProps) {
   };
 
   // ======= Busca inicial de dados =======
-  // ======= Busca aluno e planos =======
   useEffect(() => {
     const fetchAluno = async () => {
       const { id } = await params;
@@ -168,6 +171,38 @@ export default function Sessaos({ params }: ProfilePersonalProps) {
       setLoading(false);
     }
   };
+
+  // ==== Abaixo as funções para excluir planos/sessões/exercicios =====
+  async function excluirPlanoAula(id: number) {
+    try {
+      await deletePlano(id);
+      setPlanos((prev) => prev.filter((item) => item.id !== id));
+      alertSuccess("Plano deletado com sucesso!");
+    } catch {
+      alertError("Falha ao deletar o plano, tente novamente mais tarde.");
+    }
+  }
+
+  async function excluirSessaoAula(planoId: number, sessaoId: number) {
+    try {
+      await deleteSessao(sessaoId);
+      setPlanos((prev) =>
+        prev.map((plano) =>
+          plano.id === planoId
+            ? {
+                ...plano,
+                SessaoTreinos: plano.SessaoTreinos.filter(
+                  (sessao) => sessao.id !== sessaoId,
+                ),
+              }
+            : plano,
+        ),
+      );
+      alertSuccess("Sessão deletada com sucesso!");
+    } catch {
+      alertError("Falha ao deletar sessão, tente novamente mais tarde.");
+    }
+  }
 
   // ======= Modal =======
   const openModal = (
@@ -271,10 +306,20 @@ export default function Sessaos({ params }: ProfilePersonalProps) {
   return (
     <>
       <div className="space-y-4 p-4 md:p-6">
-        <h1 className="text-2xl font-semibold">{aluno.nome}</h1>
+        <div className="flex items-center gap-2">
+          <Link href="/admin/meus-alunos">
+            <ChevronLeft />
+          </Link>
+          <h1 className="text-2xl font-semibold">{aluno.nome}</h1>
+        </div>
 
         <div className="flex flex-col gap-5 md:flex-row">
-          <PlanoList planos={planos} onOpenModal={openModal} />
+          <PlanoList
+            planos={planos}
+            onExcluirPlano={excluirPlanoAula}
+            onExcluirSessao={excluirSessaoAula}
+            onOpenModal={openModal}
+          />
 
           <div className="w-full">
             <div className="mb-2 flex justify-between">

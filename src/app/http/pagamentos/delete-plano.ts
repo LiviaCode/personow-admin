@@ -1,20 +1,8 @@
 import { api } from "@/app/api-client";
 
-export interface GetAllPlanoResponse {
-  id: string;
-  personal_id: string;
-  tipo_plano: "Avulsa" | "Experimental" | "Mensal" | "Bimestral" | "Trimestral";
-  valor: number;
-  updated_at: string;
-  created_at: string;
-}
-
-export default async function getAllPlano(id: string) {
+export default async function deletePlanoPagamento(id: string) {
   try {
-    const response = await api
-      .get(`personal/planos/${id}`)
-      .json<GetAllPlanoResponse[]>();
-
+    const response = await api.delete(`personal/planos/${id}`).json();
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {

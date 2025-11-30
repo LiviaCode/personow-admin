@@ -1,32 +1,31 @@
 import { api } from "@/app/api-client";
 
-export interface UpdatePlanoRequest {
-  tipo_plano: "Avulsa" | "Experimental" | "Mensal" | "Bimestral" | "Trimestral";
-  valor: number;
+// Essa rota cria um conta para o aluno no ASAS, api de pagamentos
+export interface CreateClienteRequest {
+  nome: string;
+  cpfCnpj: string;
+  email: string;
+  telefone: string;
 }
 
-export interface UpdatePlanoResponse {
-  message: string;
-  data: {
-    id: string;
-    personal_id: string;
-    tipo_plano: string;
-    valor: number;
-    updated_at: string;
-    created_at: string;
-  };
+export interface CreateClienteResponse {
+  id: string;
+  dateCreated: string;
+  name: string;
+  email: string;
+  mobilePhone: string;
+  cpfCnpj: string;
+  personType: string;
+  country: string;
 }
 
-export default async function updatePlano(
-  id: string,
-  data: UpdatePlanoRequest,
-) {
+export default async function createCliente(data: CreateClienteRequest) {
   try {
     const response = await api
-      .put(`personal/planos/${id}`, {
+      .post("subconta/", {
         json: data,
       })
-      .json<UpdatePlanoResponse>();
+      .json<CreateClienteResponse>();
 
     return response;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
